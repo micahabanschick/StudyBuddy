@@ -1,0 +1,333 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  // Connection URLs live in prisma.config.ts (Prisma 7+).
+  extensions = [pgvector(map: "vector")]
+}
+
+// -----------------------------------------------------------------------------
+// User profile (mirrors Supabase Auth `auth.users`).
+// -----------------------------------------------------------------------------
+
+model Profile {
+  id        String   @id @db.Uuid
+  email     String?  @unique
+  name      String?
+  avatarUrl String?  @map("avatar_url")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  courses  Course[]
+  reviews  Review[]
+  attempts QuizAttempt[]
+  chats    ChatSession[]
+
+  @@map("profiles")
+}
+
+// -----------------------------------------------------------------------------
+// Courses + topics
+// -----------------------------------------------------------------------------
+
+model Course {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id") @db.Uuid
+  code      String
+  title     String
+  term      String?
+  color     String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user      Profile       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topics    Topic[]
+  documents Document[]
+  notes     Note[]
+  decks     Deck[]
+  quizzes   Quiz[]
+  chats     ChatSession[]
+
+  @@index([userId])
+  @@map("courses")
+}
+
+model Topic {
+  id        String   @id @default(cuid())
+  courseId  String   @map("course_id")
+  parentId  String?  @map("parent_id")
+  title     String
+  position  Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  course   Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  parent   Topic?  @relation("TopicTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children Topic[] @relation("TopicTree")
+  notes    Note[]
+  decks    Deck[]
+
+  @@index([courseId])
+  @@index([parentId])
+  @@map("topics")
+}
+
+// -----------------------------------------------------------------------------
+// Notes with backlinks
+// -----------------------------------------------------------------------------
+
+model Note {
+  id        String   @id @default(cuid())
+  courseId  String   @map("course_id")
+  topicId   String?  @map("topic_id")
+  title     String
+  contentMd String   @default("") @map("content_md")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  course        Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  topic         Topic?     @relation(fields: [topicId], references: [id], onDelete: SetNull)
+  outgoingLinks NoteLink[] @relation("Outgoing")
+  incomingLinks NoteLink[] @relation("Incoming")
+
+  @@index([courseId])
+  @@index([topicId])
+  @@map("notes")
+}
+
+model NoteLink {
+  fromNoteId String @map("from_note_id")
+  toNoteId   String @map("to_note_id")
+
+  fromNote Note @relation("Outgoing", fields: [fromNoteId], references: [id], onDelete: Cascade)
+  toNote   Note @relation("Incoming", fields: [toNoteId], references: [id], onDelete: Cascade)
+
+  @@id([fromNoteId, toNoteId])
+  @@map("note_links")
+}
+
+// -----------------------------------------------------------------------------
+// Uploaded documents + RAG chunks
+// -----------------------------------------------------------------------------
+
+enum DocumentStatus {
+  pending
+  ingesting
+  ready
+  failed
+
+  @@map("document_status")
+}
+
+model Document {
+  id          String         @id @default(cuid())
+  courseId    String         @map("course_id")
+  title       String
+  storagePath String         @map("storage_path")
+  pageCount   Int?           @map("page_count")
+  status      DocumentStatus @default(pending)
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+
+  course Course          @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  chunks DocumentChunk[]
+
+  @@index([courseId])
+  @@map("documents")
+}
+
+model DocumentChunk {
+  id         String                       @id @default(cuid())
+  documentId String                       @map("document_id")
+  page       Int
+  content    String
+  embedding  Unsupported("vector(1536)")?
+
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@index([documentId])
+  @@map("document_chunks")
+}
+
+// -----------------------------------------------------------------------------
+// Flashcards + FSRS scheduling
+// -----------------------------------------------------------------------------
+
+enum CardType {
+  basic
+  cloze
+
+  @@map("card_type")
+}
+
+model Deck {
+  id        String   @id @default(cuid())
+  courseId  String   @map("course_id")
+  topicId   String?  @map("topic_id")
+  title     String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  topic  Topic? @relation(fields: [topicId], references: [id], onDelete: SetNull)
+  cards  Card[]
+
+  @@index([courseId])
+  @@map("decks")
+}
+
+model Card {
+  id        String   @id @default(cuid())
+  deckId    String   @map("deck_id")
+  front     String
+  back      String
+  type      CardType @default(basic)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  deck    Deck     @relation(fields: [deckId], references: [id], onDelete: Cascade)
+  reviews Review[]
+
+  @@index([deckId])
+  @@map("cards")
+}
+
+model Review {
+  id            String   @id @default(cuid())
+  cardId        String   @map("card_id")
+  userId        String   @map("user_id") @db.Uuid
+  ts            DateTime @default(now())
+  rating        Int
+  stability     Float
+  difficulty    Float
+  due           DateTime
+  elapsedDays   Float    @map("elapsed_days")
+  scheduledDays Float    @map("scheduled_days")
+
+  card Card    @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  user Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, due])
+  @@index([cardId])
+  @@map("reviews")
+}
+
+// -----------------------------------------------------------------------------
+// Quizzes
+// -----------------------------------------------------------------------------
+
+enum QuestionType {
+  mcq
+  free_response
+
+  @@map("question_type")
+}
+
+model Quiz {
+  id            String   @id @default(cuid())
+  courseId      String   @map("course_id")
+  sourceType    String   @map("source_type")
+  generatedFrom Json?    @map("generated_from")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  course    Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  questions QuizQuestion[]
+  attempts  QuizAttempt[]
+
+  @@index([courseId])
+  @@map("quizzes")
+}
+
+model QuizQuestion {
+  id          String       @id @default(cuid())
+  quizId      String       @map("quiz_id")
+  type        QuestionType
+  prompt      String
+  choices     Json?
+  answer      String
+  explanation String?
+  position    Int          @default(0)
+
+  quiz      Quiz           @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  responses QuizResponse[]
+
+  @@index([quizId])
+  @@map("quiz_questions")
+}
+
+model QuizAttempt {
+  id          String    @id @default(cuid())
+  quizId      String    @map("quiz_id")
+  userId      String    @map("user_id") @db.Uuid
+  score       Float?
+  startedAt   DateTime  @default(now()) @map("started_at")
+  completedAt DateTime? @map("completed_at")
+
+  quiz      Quiz           @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  user      Profile        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  responses QuizResponse[]
+
+  @@index([userId])
+  @@map("quiz_attempts")
+}
+
+model QuizResponse {
+  id          String @id @default(cuid())
+  attemptId   String @map("attempt_id")
+  questionId  String @map("question_id")
+  response    String
+  scoreEarned Float? @map("score_earned")
+  feedback    String?
+
+  attempt  QuizAttempt  @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  question QuizQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([attemptId])
+  @@map("quiz_responses")
+}
+
+// -----------------------------------------------------------------------------
+// Chat (RAG)
+// -----------------------------------------------------------------------------
+
+model ChatSession {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id") @db.Uuid
+  courseId  String?  @map("course_id")
+  title     String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user     Profile       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course   Course?       @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  messages ChatMessage[]
+
+  @@index([userId])
+  @@index([courseId])
+  @@map("chat_sessions")
+}
+
+enum ChatRole {
+  user
+  assistant
+  system
+
+  @@map("chat_role")
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  sessionId String   @map("session_id")
+  role      ChatRole
+  content   String
+  citations Json?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  session ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@map("chat_messages")
+}
