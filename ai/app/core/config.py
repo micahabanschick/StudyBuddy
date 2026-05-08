@@ -19,11 +19,20 @@ class Settings(BaseSettings):
     anthropic_api_key: str | None = None
 
     service_secret: str | None = None
-    web_origin: str = "http://localhost:3000"
+    # Comma-separated list of allowed CORS origins, e.g.:
+    # "http://localhost:3000,https://studybuddy.vercel.app,https://deploy-preview-*.vercel.app"
+    web_origins: str = "http://localhost:3000"
+
+    # Python-native environment flag. Set APP_ENV=production on Fly.io.
+    app_env: str = "local"
 
     host: str = "0.0.0.0"
     port: int = 8000
     log_level: str = "info"
+
+    @property
+    def allowed_origins(self) -> list[str]:
+        return [o.strip() for o in self.web_origins.split(",") if o.strip()]
 
     @property
     def is_supabase_configured(self) -> bool:

@@ -23,6 +23,7 @@ export function CommandPaletteProvider({ children }: { children: React.ReactNode
 
   React.useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
+      if (e.repeat) return
       if (e.key !== 'k' || (!e.metaKey && !e.ctrlKey)) return
       const target = e.target as HTMLElement | null
       if (

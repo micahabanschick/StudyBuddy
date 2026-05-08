@@ -1,5 +1,4 @@
 import logging
-import os
 from typing import Annotated
 
 from fastapi import Depends, Header, HTTPException, status
@@ -23,8 +22,8 @@ def require_service_secret(
 ) -> None:
     expected = settings.service_secret
     if not expected:
-        # Warn in non-development environments so this isn't silently bypassed in prod.
-        if os.getenv("NODE_ENV") != "development" and os.getenv("ENVIRONMENT") != "development":
+        # Warn unless explicitly running in local dev mode.
+        if settings.app_env not in ("development", "local"):
             logger.warning(
                 "SERVICE_SECRET is not set — internal auth is disabled. "
                 "Set SERVICE_SECRET in production to prevent unauthenticated access."
@@ -60,9 +59,8 @@ def require_user(
             audience="authenticated",
         )
     except JWTError as exc:
-        raise HTTPException(
-            status.HTTP_401_UNAUTHORIZED, detail=f"invalid token: {exc}"
-        ) from exc
+        logger.debug("JWT validation failed: %s", exc)
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail="invalid token") from exc
 
     sub = payload.get("sub")
     if not isinstance(sub, str):

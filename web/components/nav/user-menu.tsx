@@ -3,6 +3,7 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { LogOut, Settings, User } from 'lucide-react'
+import { toast } from 'sonner'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -23,9 +24,15 @@ export function UserMenu({
   initials?: string
 }) {
   const handleSignOut = async () => {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-    window.location.href = '/login'
+    try {
+      const supabase = createClient()
+      const { error } = await supabase.auth.signOut()
+      if (error) throw error
+      window.location.href = '/login'
+    } catch (err) {
+      console.error('Sign-out failed:', err)
+      toast.error('Could not sign out. Please try again.')
+    }
   }
 
   return (

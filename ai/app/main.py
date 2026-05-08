@@ -20,7 +20,8 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:  # noqa: ARG001
     logger.info(
         "ai_service.start",
         supabase_configured=settings.is_supabase_configured,
-        web_origin=settings.web_origin,
+        allowed_origins=settings.allowed_origins,
+        app_env=settings.app_env,
     )
     yield
 
@@ -35,7 +36,7 @@ app = FastAPI(
 settings = get_settings()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.web_origin],
+    allow_origins=settings.allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

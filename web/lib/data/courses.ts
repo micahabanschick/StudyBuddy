@@ -15,7 +15,11 @@ export async function getCourses(): Promise<CourseRow[]> {
       orderBy: { createdAt: 'asc' },
       select: { id: true, code: true, title: true, term: true, color: true },
     })
-  } catch {
+  } catch (err) {
+    // In dev, surface the error so misconfigurations aren't silently hidden.
+    if (process.env.NODE_ENV === 'development') {
+      console.error('[getCourses] DB error:', err)
+    }
     return []
   }
 }
