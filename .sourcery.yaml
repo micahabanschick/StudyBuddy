@@ -1,0 +1,29 @@
+refactor:
+  # Target the Python version used in ai/
+  python_version: "3.12"
+
+rule_settings:
+  enable:
+    - default
+  disable:
+    # We use explicit early returns intentionally throughout
+    - remove-redundant-else
+    # Pydantic models and FastAPI deps use a lot of class bodies
+    - use-named-expression
+
+github:
+  # Post a summary comment and label the PR with the review outcome
+  label_prs: true
+  request_review: auto
+
+ignore:
+  # Generated / vendored / lock files
+  - "**/node_modules/**"
+  - "**/.next/**"
+  - "**/.venv/**"
+  - "**/pnpm-lock.yaml"
+  - "**/uv.lock"
+  - "web/prisma/migrations/**"
+  # Static assets and config we don't want flagged
+  - "web/public/**"
+  - "**/*.css"
