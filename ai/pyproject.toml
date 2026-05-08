@@ -1,0 +1,47 @@
+[project]
+name = "studybuddy-ai"
+version = "0.1.0"
+description = "StudyBuddy AI service: RAG, embeddings, RDKit-backed chemistry tooling."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.118",
+    "uvicorn[standard]>=0.34",
+    "pydantic>=2.9",
+    "pydantic-settings>=2.6",
+    "httpx>=0.28",
+    "python-jose[cryptography]>=3.3",
+    "anthropic>=0.40",
+    "pypdf>=5.1",
+    "supabase>=2.10",
+    "structlog>=24.4",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.25",
+    "ruff>=0.8",
+    "mypy>=1.13",
+    "types-python-jose>=3.3",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+ignore_missing_imports = true
