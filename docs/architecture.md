@@ -37,7 +37,7 @@ Prisma, Tailwind. But three categories of work pull toward Python:
 1. **PDF ingestion + chunking** — pypdf, unstructured, layout-aware parsers.
 2. **Embeddings** — fine to do in TS, but easier to swap models in Python.
 3. **Domain libs** — RDKit for chemistry (SMILES → 2D structures, properties),
-   BioPython if molecular biology features land later.
+   Biopython if molecular biology features land later.
 
 Putting these in a separate service keeps the Next.js bundle small, isolates
 heavy dependencies, and lets the AI service scale independently.

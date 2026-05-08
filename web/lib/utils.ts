@@ -5,8 +5,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatRelative(date: Date | string | number) {
+export function formatRelative(date: Date | string | number): string {
   const d = typeof date === 'object' ? date : new Date(date)
+  if (Number.isNaN(d.getTime())) return ''
+
   const diff = Date.now() - d.getTime()
   const minute = 60_000
   const hour = 60 * minute

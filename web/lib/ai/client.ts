@@ -1,3 +1,4 @@
+import 'server-only'
 import { serverEnv } from '@/lib/env'
 
 export class AIServiceError extends Error {

@@ -3,22 +3,9 @@ import Link from 'next/link'
 import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { getCourses } from '@/lib/data/courses'
 
 export const metadata: Metadata = { title: 'Courses' }
-
-type Course = { id: string; code: string; title: string; term: string | null; color: string | null }
-
-async function getCourses(): Promise<Course[]> {
-  try {
-    const { db } = await import('@/lib/db')
-    return db.course.findMany({
-      orderBy: { createdAt: 'asc' },
-      select: { id: true, code: true, title: true, term: true, color: true },
-    })
-  } catch {
-    return []
-  }
-}
 
 export default async function CoursesPage() {
   const courses = await getCourses()

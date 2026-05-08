@@ -23,10 +23,18 @@ export function CommandPaletteProvider({ children }: { children: React.ReactNode
 
   React.useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault()
-        setIsOpen((o) => !o)
-      }
+      if (e.key !== 'k' || (!e.metaKey && !e.ctrlKey)) return
+      const target = e.target as HTMLElement | null
+      if (
+        target &&
+        (target.tagName === 'INPUT' ||
+          target.tagName === 'TEXTAREA' ||
+          target.isContentEditable ||
+          !!target.closest('[contenteditable="true"]'))
+      )
+        return
+      e.preventDefault()
+      setIsOpen((o) => !o)
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)

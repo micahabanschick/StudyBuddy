@@ -7,7 +7,7 @@ Status: Accepted
 
 StudyBuddy needs a polished, dynamic UI and AI features that lean on the
 Python ecosystem (RDKit for chemistry structures, mature PDF ingestion
-libraries, future use of BioPython). A Next.js-only app would force us to
+libraries, future use of Biopython). A Next.js-only app would force us to
 either reimplement these tools or call them out of process anyway; a
 Python-backend-only architecture would give up the type-safe, server-component
 DX that Next.js offers.
@@ -35,7 +35,7 @@ sibling directories.
 - (+) Heavy Python deps don't bloat the Next.js bundle or cold-start.
 - (+) Independent deploy + scale (Vercel vs Fly.io).
 - (−) Two `.env` files, two CI matrices, two dep upgrade cadences.
-- (−) Type sharing across the boundary is hand-mirrored (zod ↔ pydantic).
+- (−) Type sharing across the boundary is hand-mirrored (zod ↔ Pydantic).
   Tolerable while the surface is small; revisit if it grows.
 - (−) Local dev requires both processes running. Mitigated by a Docker Compose
   file under `infra/` for contributors who don't want Python locally.

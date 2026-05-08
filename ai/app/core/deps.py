@@ -1,3 +1,5 @@
+import logging
+import os
 from typing import Annotated
 
 from fastapi import Depends, Header, HTTPException, status
@@ -5,6 +7,8 @@ from jose import JWTError, jwt
 from pydantic import BaseModel
 
 from app.core.config import Settings, get_settings
+
+logger = logging.getLogger(__name__)
 
 
 class CurrentUser(BaseModel):
@@ -19,6 +23,12 @@ def require_service_secret(
 ) -> None:
     expected = settings.service_secret
     if not expected:
+        # Warn in non-development environments so this isn't silently bypassed in prod.
+        if os.getenv("NODE_ENV") != "development" and os.getenv("ENVIRONMENT") != "development":
+            logger.warning(
+                "SERVICE_SECRET is not set — internal auth is disabled. "
+                "Set SERVICE_SECRET in production to prevent unauthenticated access."
+            )
         return
     if x_service_secret != expected:
         raise HTTPException(
