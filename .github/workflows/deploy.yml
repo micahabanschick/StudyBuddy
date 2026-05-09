@@ -15,6 +15,8 @@ jobs:
           username: root
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            cd /opt/banschick-toolset/apps/studybuddy-web && git pull origin claude/study-aid-app-lIjfv
-            cd /opt/banschick-toolset/apps/studybuddy-ai && git pull origin claude/study-aid-app-lIjfv
+            git clone -b claude/study-aid-app-lIjfv git@github.com:micahabanschick/StudyBuddy.git /tmp/studybuddy-deploy
+            rsync -a --exclude='.git' --exclude='.env' /tmp/studybuddy-deploy/web/ /opt/banschick-toolset/apps/studybuddy-web/
+            rsync -a --exclude='.git' --exclude='.env' /tmp/studybuddy-deploy/ai/ /opt/banschick-toolset/apps/studybuddy-ai/
+            rm -rf /tmp/studybuddy-deploy
             cd /opt/banschick-toolset && docker compose up -d --build studybuddy-web studybuddy-ai
