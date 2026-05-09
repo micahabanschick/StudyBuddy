@@ -10,6 +10,8 @@ const withSerwist = withSerwistInit({
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   output: 'standalone',
+  // Required: tells Next 16 to use Turbopack even when a plugin (Serwist) adds a webpack config
+  turbopack: {},
   typescript: {
     ignoreBuildErrors: true,
   },
