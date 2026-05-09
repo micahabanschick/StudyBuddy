@@ -7,7 +7,6 @@ export const isDatabaseConfigured = () => !!process.env.DATABASE_URL
 function createClient(): PrismaClient {
   const url = process.env.DATABASE_URL
   if (!url) {
-    // No DB configured — return a proxy that fails gracefully at query time.
     return new Proxy({} as PrismaClient, {
       get(_, prop) {
         if (prop === '$connect' || prop === '$disconnect') return () => Promise.resolve()
@@ -17,12 +16,17 @@ function createClient(): PrismaClient {
     })
   }
 
-  // Prisma 7 requires a driver adapter. Use @prisma/adapter-pg for Postgres/Supabase.
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { Pool } = require('pg') as typeof import('pg')
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { PrismaPg } = require('@prisma/adapter-pg') as typeof import('@prisma/adapter-pg')
-  const pool = new Pool({ connectionString: url })
+
+  // Supabase (and most hosted Postgres) requires SSL.
+  // rejectUnauthorized:false trusts Supabase's cert without needing a local CA bundle.
+  const pool = new Pool({
+    connectionString: url,
+    ssl: url.includes('supabase.com') ? { rejectUnauthorized: false } : undefined,
+  })
   const adapter = new PrismaPg(pool)
 
   return new PrismaClient({
