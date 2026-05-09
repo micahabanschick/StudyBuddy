@@ -9,7 +9,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const courses = await getCourses()
 
   return (
-    <CommandPaletteProvider>
+    <CommandPaletteProvider courses={courses}>
       <div className="app-shell-bg flex min-h-svh">
         <Sidebar courses={courses} />
         <div className="flex min-w-0 flex-1 flex-col">
