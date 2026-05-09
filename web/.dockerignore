@@ -1,0 +1,11 @@
+node_modules/
+.next/
+.git/
+*.log
+*.tsbuildinfo
+coverage/
+playwright-report/
+test-results/
+# .env.local is intentionally NOT excluded here.
+# NEXT_PUBLIC_* variables must be present during `next build` to be inlined.
+# The file is excluded from git (web/.gitignore) but included in the Docker build context.
