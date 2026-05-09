@@ -33,7 +33,7 @@ export function NoteEditor({ noteId, courseId, topicId, initialTitle, initialCon
   const [saving, setSaving] = React.useState(false)
   const [aiOpen, setAiOpen] = React.useState(false)
   const [selectedText, setSelectedText] = React.useState('')
-  const saveTimer = React.useRef<ReturnType<typeof setTimeout>>()
+  const saveTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const editor = useEditor({
     extensions: [
@@ -62,7 +62,7 @@ export function NoteEditor({ noteId, courseId, topicId, initialTitle, initialCon
       },
     },
     onUpdate: ({ editor }) => {
-      clearTimeout(saveTimer.current)
+      clearTimeout(saveTimer.current ?? undefined)
       saveTimer.current = setTimeout(() => {
         setSaving(true)
         const md = editor.storage.markdown.getMarkdown() as string

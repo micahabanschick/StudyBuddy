@@ -39,7 +39,7 @@ export const BacklinkExtension = Node.create({
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(BacklinkView)
+    return ReactNodeViewRenderer(BacklinkView as any)
   },
 
   addProseMirrorPlugins() {
@@ -102,7 +102,7 @@ export const BacklinkExtension = Node.create({
             },
           }
         },
-      } as Partial<SuggestionOptions>),
+      } as any),
     ]
   },
 

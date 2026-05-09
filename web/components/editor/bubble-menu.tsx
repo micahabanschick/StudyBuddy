@@ -50,7 +50,7 @@ export function EditorBubbleMenu({ editor }: { editor: Editor }) {
         <Code className="size-3.5" />
       </BubbleButton>
       <BubbleButton
-        onClick={() => editor.chain().focus().toggleMath().run?.()}
+        onClick={() => (editor.chain().focus() as any).toggleMath().run?.()}
         active={editor.isActive('math')}
         aria-label="Math"
       >

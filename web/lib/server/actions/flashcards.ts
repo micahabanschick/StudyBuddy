@@ -67,7 +67,7 @@ export async function rateCard(
           ? Rating.Good
           : Rating.Easy
 
-  const result = f.repeat(card, now)
+  const result = f.repeat(card as any, now)
   const scheduled = result[fsrsRating]
 
   await db.review.create({

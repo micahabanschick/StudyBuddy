@@ -75,6 +75,6 @@ export const SmilesExtension = Node.create({
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(SmilesView)
+    return ReactNodeViewRenderer(SmilesView as any)
   },
 })
