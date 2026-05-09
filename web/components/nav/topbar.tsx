@@ -16,7 +16,7 @@ const TITLES: Record<string, string> = {
   '/settings': 'Settings',
 }
 
-export function Topbar() {
+export function Topbar({ mobileNav }: { mobileNav?: React.ReactNode }) {
   const pathname = usePathname()
   const { open } = useCommandPalette()
 
@@ -27,6 +27,7 @@ export function Topbar() {
 
   return (
     <header className="bg-background/80 sticky top-0 z-30 flex h-14 items-center gap-3 border-b px-4 backdrop-blur md:px-6">
+      {mobileNav}
       <h1 className="text-sm font-semibold tracking-tight">{title}</h1>
 
       <div className="ml-auto flex items-center gap-2">

@@ -7,6 +7,7 @@ import { Mathematics } from '@tiptap/extension-mathematics'
 import { Link } from '@tiptap/extension-link'
 import { Placeholder } from '@tiptap/extension-placeholder'
 import { CharacterCount } from '@tiptap/extension-character-count'
+import { Markdown } from 'tiptap-markdown'
 import { Sparkles } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
@@ -39,24 +40,33 @@ export function NoteEditor({ noteId, courseId, topicId, initialTitle, initialCon
       StarterKit.configure({ codeBlock: { HTMLAttributes: { class: 'not-prose' } } }),
       Mathematics,
       Link.configure({ openOnClick: false }),
-      Placeholder.configure({ placeholder: 'Start writing… (use $math$ for equations, :smiles[CCO]: for chemistry, [[ for backlinks)' }),
+      Placeholder.configure({
+        placeholder:
+          'Start writing… ($math$ for equations, :smiles[CCO]: for chemistry, [[ for backlinks)',
+      }),
       CharacterCount,
+      // Serialize to/from markdown so contentMd stores clean markdown, not HTML
+      Markdown.configure({ html: false, transformPastedText: true }),
       BacklinkExtension.extend({
-        addStorage() { return { courseId } },
+        addStorage() {
+          return { courseId }
+        },
       }),
       SmilesExtension,
     ],
     content: initialContent || '',
     editorProps: {
       attributes: {
-        class: 'prose prose-sm dark:prose-invert max-w-none focus:outline-none min-h-[60vh] px-8 py-4',
+        class:
+          'prose prose-sm dark:prose-invert max-w-none focus:outline-none min-h-[60vh] px-8 py-4',
       },
     },
     onUpdate: ({ editor }) => {
       clearTimeout(saveTimer.current)
       saveTimer.current = setTimeout(() => {
         setSaving(true)
-        updateNoteContent(noteId, editor.getText() === '' ? '' : editor.getHTML())
+        const md = editor.storage.markdown.getMarkdown() as string
+        updateNoteContent(noteId, md)
           .catch(() => toast.error('Failed to save'))
           .finally(() => setSaving(false))
       }, AUTOSAVE_DELAY)
@@ -69,7 +79,9 @@ export function NoteEditor({ noteId, courseId, topicId, initialTitle, initialCon
 
   const handleTitleBlur = async () => {
     if (title !== initialTitle) {
-      await updateNoteTitle(noteId, title, courseId).catch(() => toast.error('Failed to save title'))
+      await updateNoteTitle(noteId, title, courseId).catch(() =>
+        toast.error('Failed to save title'),
+      )
     }
   }
 
@@ -79,15 +91,15 @@ export function NoteEditor({ noteId, courseId, topicId, initialTitle, initialCon
 
   return (
     <div className="flex h-full min-h-0">
-      {/* Editor area */}
       <div className="flex min-w-0 flex-1 flex-col">
-        {/* Title + toolbar */}
         <div className="flex items-center gap-2 border-b px-8 py-3">
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             onBlur={handleTitleBlur}
-            onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur() }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') e.currentTarget.blur()
+            }}
             placeholder="Untitled note"
             className="min-w-0 flex-1 bg-transparent text-2xl font-semibold tracking-tight outline-none placeholder:text-muted-foreground/50"
           />
@@ -102,22 +114,24 @@ export function NoteEditor({ noteId, courseId, topicId, initialTitle, initialCon
           </Button>
         </div>
 
-        {/* Editor */}
         <div className="relative flex-1 overflow-y-auto">
           {editor && <EditorBubbleMenu editor={editor} />}
           <EditorContent editor={editor} className="h-full" />
         </div>
 
-        {/* Footer */}
         <div className="flex items-center justify-between border-t px-8 py-1.5">
           <span className="text-muted-foreground text-xs">{wordCount} words</span>
-          <span className={cn('text-xs transition-opacity', saving ? 'text-muted-foreground opacity-100' : 'opacity-0')}>
+          <span
+            className={cn(
+              'text-xs transition-opacity',
+              saving ? 'text-muted-foreground opacity-100' : 'opacity-0',
+            )}
+          >
             Saving…
           </span>
         </div>
       </div>
 
-      {/* AI Panel */}
       <AiPanel
         open={aiOpen}
         onClose={() => setAiOpen(false)}
