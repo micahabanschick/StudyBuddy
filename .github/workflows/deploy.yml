@@ -1,0 +1,20 @@
+name: Deploy to Banschick Toolset
+
+on:
+  push:
+    branches: [claude/study-aid-app-lIjfv]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy StudyBuddy to server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: 87.99.133.129
+          username: root
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cd /opt/banschick-toolset/apps/studybuddy-web && git pull origin claude/study-aid-app-lIjfv
+            cd /opt/banschick-toolset/apps/studybuddy-ai && git pull origin claude/study-aid-app-lIjfv
+            cd /opt/banschick-toolset && docker compose up -d --build studybuddy-web studybuddy-ai
