@@ -1,7 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["postgresqlExtensions"]
-  // TODO: switch to @prisma/adapter-pg once Supabase is connected
 }
 
 datasource db {
