@@ -1,4 +1,3 @@
-import json
 import logging
 from typing import Annotated
 
@@ -7,7 +6,11 @@ from fastapi import APIRouter, Depends, HTTPException, status
 
 from app.core.config import Settings, get_settings
 from app.core.deps import CurrentUser, require_service_secret, require_user
-from app.schemas.flashcards import FlashcardsGenerateRequest, FlashcardsGenerateResponse, FlashcardItem
+from app.schemas.flashcards import (
+    FlashcardItem,
+    FlashcardsGenerateRequest,
+    FlashcardsGenerateResponse,
+)
 
 logger = logging.getLogger(__name__)
 
