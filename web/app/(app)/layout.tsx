@@ -5,6 +5,9 @@ import { CommandPaletteProvider } from '@/components/nav/command-palette'
 import { ConfigBanner } from '@/components/banners/config-banner'
 import { getCourses } from '@/lib/data/courses'
 
+// All pages under (app) fetch user-specific data — never prerender at build time.
+export const dynamic = 'force-dynamic'
+
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const courses = await getCourses()
 
