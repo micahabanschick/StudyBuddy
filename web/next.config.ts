@@ -1,11 +1,16 @@
 import type { NextConfig } from 'next'
+import withSerwistInit from '@serwist/next'
+
+const withSerwist = withSerwistInit({
+  swSrc: 'app/sw.ts',
+  swDest: 'public/sw.js',
+  disable: process.env.NODE_ENV === 'development',
+})
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   output: 'standalone',
   typescript: {
-    // Source branch has type errors in editor extensions; ignore for production
-    // build and fix upstream in the StudyBuddy repo.
     ignoreBuildErrors: true,
   },
   images: {
@@ -19,4 +24,4 @@ const nextConfig: NextConfig = {
   },
 }
 
-export default nextConfig
+export default withSerwist(nextConfig)

@@ -15,15 +15,30 @@ export const metadata: Metadata = {
     template: '%s · StudyBuddy',
   },
   description:
-    'A personal study aid for undergraduate and graduate coursework: spaced-repetition flashcards, AI Q&A grounded in your own materials, notes, and quizzes.',
+    'AI-powered personal study companion — spaced-repetition flashcards, notes, quizzes, and RAG chat over your own course materials.',
   applicationName: 'StudyBuddy',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'StudyBuddy',
+  },
+  formatDetection: { telephone: false },
+  icons: {
+    icon: '/icons/icon.svg',
+    apple: '/icons/icon.svg',
+  },
 }
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#0d0d12' },
+    { media: '(prefers-color-scheme: light)', color: '#7c3aed' },
+    { media: '(prefers-color-scheme: dark)', color: '#7c3aed' },
   ],
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -1,0 +1,35 @@
+{
+  "name": "StudyBuddy",
+  "short_name": "StudyBuddy",
+  "description": "AI-powered personal study companion — notes, flashcards, quizzes, and RAG chat over your own course materials.",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#0d0d14",
+  "theme_color": "#7c3aed",
+  "orientation": "portrait-primary",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Daily Review",
+      "short_name": "Review",
+      "description": "Jump into your FSRS flashcard review queue",
+      "url": "/review",
+      "icons": [{ "src": "/icons/icon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Courses",
+      "short_name": "Courses",
+      "description": "Open your course list",
+      "url": "/courses",
+      "icons": [{ "src": "/icons/icon.svg", "sizes": "any" }]
+    }
+  ]
+}
