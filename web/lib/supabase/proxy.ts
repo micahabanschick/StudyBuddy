@@ -2,15 +2,12 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 import { isSupabaseConfigured, publicEnv } from '@/lib/env'
 
-const PROTECTED_PREFIXES = ['/dashboard', '/courses', '/review', '/chat', '/settings']
 const AUTH_ROUTES = ['/login', '/signup']
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request })
 
-  if (!isSupabaseConfigured()) {
-    return response
-  }
+  if (!isSupabaseConfigured()) return response
 
   const supabase = createServerClient(
     publicEnv.NEXT_PUBLIC_SUPABASE_URL!,
@@ -35,23 +32,14 @@ export async function updateSession(request: NextRequest) {
   const user = data.user
   const { pathname } = request.nextUrl
 
-  const isProtected = PROTECTED_PREFIXES.some(
-    (p) => pathname === p || pathname.startsWith(p + '/'),
-  )
-  const isAuthRoute = AUTH_ROUTES.includes(pathname)
-
-  if (!user && isProtected) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    url.searchParams.set('next', pathname)
-    return NextResponse.redirect(url)
-  }
-
-  if (user && isAuthRoute) {
+  // Once logged in, redirect away from auth pages
+  if (user && AUTH_ROUTES.includes(pathname)) {
     const url = request.nextUrl.clone()
     url.pathname = '/dashboard'
     return NextResponse.redirect(url)
   }
 
+  // Personal app — no hard gate on routes.
+  // Login is available but not required to access the app.
   return response
 }

@@ -29,7 +29,7 @@ export async function createCourse(
   await db.course.create({
     data: {
       ...parsed.data,
-      userId: '00000000-0000-0000-0000-000000000000',
+      userId: process.env.OWNER_USER_ID ?? '00000000-0000-0000-0000-000000000000',
     },
   })
 
