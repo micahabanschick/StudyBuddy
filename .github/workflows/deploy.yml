@@ -2,7 +2,7 @@ name: Deploy to Banschick Toolset
 
 on:
   push:
-    branches: [claude/study-aid-app-lIjfv]
+    branches: [main]
 
 jobs:
   deploy:
@@ -15,7 +15,7 @@ jobs:
           username: root
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            git clone -b claude/study-aid-app-lIjfv git@github.com:micahabanschick/StudyBuddy.git /tmp/studybuddy-deploy
+            git clone -b main git@github.com:micahabanschick/StudyBuddy.git /tmp/studybuddy-deploy
             rsync -a --exclude='.git' --exclude='.env' /tmp/studybuddy-deploy/web/ /opt/banschick-toolset/apps/studybuddy-web/
             rsync -a --exclude='.git' --exclude='.env' /tmp/studybuddy-deploy/ai/ /opt/banschick-toolset/apps/studybuddy-ai/
             rm -rf /tmp/studybuddy-deploy
