@@ -1,4 +1,10 @@
 import { PrismaClient } from '@prisma/client'
+import { setDefaultResultOrder } from 'dns'
+
+// Force IPv4 DNS resolution — Hetzner (and many VPS providers) route Supabase's
+// direct hostname as IPv6-only, which is unreachable without IPv6 connectivity.
+// This must be called before any TCP connections are made.
+setDefaultResultOrder('ipv4first')
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient }
 
@@ -21,8 +27,6 @@ function createClient(): PrismaClient {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { PrismaPg } = require('@prisma/adapter-pg') as typeof import('@prisma/adapter-pg')
 
-  // Supabase (and most hosted Postgres) requires SSL.
-  // rejectUnauthorized:false trusts Supabase's cert without needing a local CA bundle.
   const pool = new Pool({
     connectionString: url,
     ssl: url.includes('supabase.com') ? { rejectUnauthorized: false } : undefined,
