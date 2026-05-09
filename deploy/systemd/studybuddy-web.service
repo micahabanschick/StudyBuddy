@@ -1,0 +1,23 @@
+[Unit]
+Description=StudyBuddy Web (Next.js)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=studybuddy
+WorkingDirectory=/opt/studybuddy/web
+EnvironmentFile=/opt/studybuddy/web/.env.local
+Environment="NODE_ENV=production"
+Environment="PATH=/usr/local/bin:/usr/bin:/bin"
+ExecStartPre=/usr/local/bin/pnpm db:generate
+ExecStart=/usr/local/bin/pnpm start
+Restart=on-failure
+RestartSec=5
+StandardOutput=append:/var/log/studybuddy/web.log
+StandardError=append:/var/log/studybuddy/web.log
+MemoryMax=512M
+CPUQuota=60%
+
+[Install]
+WantedBy=multi-user.target

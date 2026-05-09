@@ -1,0 +1,24 @@
+[Unit]
+Description=StudyBuddy AI service (FastAPI)
+After=network-online.target studybuddy-web.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=studybuddy
+WorkingDirectory=/opt/studybuddy/ai
+EnvironmentFile=/opt/studybuddy/ai/.env
+Environment="PATH=/opt/studybuddy/ai/.venv/bin:/usr/local/bin:/usr/bin:/bin"
+ExecStart=/opt/studybuddy/ai/.venv/bin/uvicorn app.main:app \
+    --host 127.0.0.1 \
+    --port 8000 \
+    --workers 2
+Restart=on-failure
+RestartSec=5
+StandardOutput=append:/var/log/studybuddy/ai.log
+StandardError=append:/var/log/studybuddy/ai.log
+MemoryMax=512M
+CPUQuota=60%
+
+[Install]
+WantedBy=multi-user.target
