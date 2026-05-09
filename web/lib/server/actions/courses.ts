@@ -3,7 +3,9 @@ import 'server-only'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
-import { db } from '@/lib/db'
+import { db, isDatabaseConfigured } from '@/lib/db'
+
+const NO_DB = { error: 'Database not configured — add DATABASE_URL to web/.env.local first.' }
 
 const CourseSchema = z.object({
   code: z.string().min(1, 'Course code is required').max(20),
@@ -19,6 +21,7 @@ export async function createCourse(
   _prev: { error?: string } | null,
   formData: FormData,
 ): Promise<{ error?: string }> {
+  if (!isDatabaseConfigured()) return NO_DB
   const raw = Object.fromEntries(formData)
   const parsed = CourseSchema.safeParse(raw)
   if (!parsed.success) return { error: parsed.error.issues[0].message }
@@ -26,7 +29,6 @@ export async function createCourse(
   await db.course.create({
     data: {
       ...parsed.data,
-      // Personal app — hardcoded local user until Supabase is wired
       userId: '00000000-0000-0000-0000-000000000000',
     },
   })
@@ -40,6 +42,7 @@ export async function updateCourse(
   _prev: { error?: string } | null,
   formData: FormData,
 ): Promise<{ error?: string }> {
+  if (!isDatabaseConfigured()) return NO_DB
   const raw = Object.fromEntries(formData)
   const parsed = CourseSchema.safeParse(raw)
   if (!parsed.success) return { error: parsed.error.issues[0].message }
@@ -52,6 +55,7 @@ export async function updateCourse(
 }
 
 export async function deleteCourse(id: string): Promise<void> {
+  if (!isDatabaseConfigured()) return
   await db.course.delete({ where: { id } })
   revalidatePath('/courses')
   redirect('/courses')

@@ -1,12 +1,13 @@
 'use server'
 import 'server-only'
 import { revalidatePath } from 'next/cache'
-import { db } from '@/lib/db'
+import { db, isDatabaseConfigured } from '@/lib/db'
 
 export async function createTopic(
   courseId: string,
   title: string,
 ): Promise<{ id: string; error?: string }> {
+  if (!isDatabaseConfigured()) return { id: '', error: 'Database not configured' }
   if (!title.trim()) return { id: '', error: 'Title is required' }
 
   const last = await db.topic.findFirst({
@@ -25,12 +26,13 @@ export async function createTopic(
 }
 
 export async function updateTopic(id: string, title: string, courseId: string): Promise<void> {
-  if (!title.trim()) return
+  if (!isDatabaseConfigured() || !title.trim()) return
   await db.topic.update({ where: { id }, data: { title: title.trim() } })
   revalidatePath(`/courses/${courseId}`)
 }
 
 export async function deleteTopic(id: string, courseId: string): Promise<void> {
+  if (!isDatabaseConfigured()) return
   await db.topic.delete({ where: { id } })
   revalidatePath(`/courses/${courseId}`)
 }
