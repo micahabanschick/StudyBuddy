@@ -1,6 +1,9 @@
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["postgresqlExtensions"]
+  // "library" engine avoids requiring a driver adapter when no DATABASE_URL is set.
+  // Switch to an adapter (e.g. @prisma/adapter-pg) once Supabase is connected.
+  engineType      = "library"
 }
 
 datasource db {

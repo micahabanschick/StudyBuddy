@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogFooter,
@@ -52,6 +53,9 @@ export function CourseForm({ open, onOpenChange, course }: Props) {
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>{isEdit ? 'Edit course' : 'New course'}</DialogTitle>
+          <DialogDescription className="sr-only">
+            {isEdit ? 'Edit course details' : 'Create a new course'}
+          </DialogDescription>
         </DialogHeader>
         <form action={dispatch} className="flex flex-col gap-4">
           <input type="hidden" name="color" value={color} />
