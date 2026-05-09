@@ -1,0 +1,132 @@
+'use client'
+
+import * as React from 'react'
+import { useEditor, EditorContent } from '@tiptap/react'
+import { StarterKit } from '@tiptap/starter-kit'
+import { Mathematics } from '@tiptap/extension-mathematics'
+import { Link } from '@tiptap/extension-link'
+import { Placeholder } from '@tiptap/extension-placeholder'
+import { CharacterCount } from '@tiptap/extension-character-count'
+import { Sparkles } from 'lucide-react'
+import { toast } from 'sonner'
+import { Button } from '@/components/ui/button'
+import { EditorBubbleMenu } from '@/components/editor/bubble-menu'
+import { AiPanel } from '@/components/editor/ai-panel'
+import { BacklinkExtension } from '@/components/editor/extensions/backlink-extension'
+import { SmilesExtension } from '@/components/editor/extensions/smiles-node'
+import { updateNoteContent, updateNoteTitle } from '@/lib/server/actions/notes'
+import { cn } from '@/lib/utils'
+
+type Props = {
+  noteId: string
+  courseId: string
+  topicId?: string | null
+  initialTitle: string
+  initialContent: string
+}
+
+const AUTOSAVE_DELAY = 800
+
+export function NoteEditor({ noteId, courseId, topicId, initialTitle, initialContent }: Props) {
+  const [title, setTitle] = React.useState(initialTitle)
+  const [saving, setSaving] = React.useState(false)
+  const [aiOpen, setAiOpen] = React.useState(false)
+  const [selectedText, setSelectedText] = React.useState('')
+  const saveTimer = React.useRef<ReturnType<typeof setTimeout>>()
+
+  const editor = useEditor({
+    extensions: [
+      StarterKit.configure({ codeBlock: { HTMLAttributes: { class: 'not-prose' } } }),
+      Mathematics,
+      Link.configure({ openOnClick: false }),
+      Placeholder.configure({ placeholder: 'Start writing… (use $math$ for equations, :smiles[CCO]: for chemistry, [[ for backlinks)' }),
+      CharacterCount,
+      BacklinkExtension.extend({
+        addStorage() { return { courseId } },
+      }),
+      SmilesExtension,
+    ],
+    content: initialContent || '',
+    editorProps: {
+      attributes: {
+        class: 'prose prose-sm dark:prose-invert max-w-none focus:outline-none min-h-[60vh] px-8 py-4',
+      },
+    },
+    onUpdate: ({ editor }) => {
+      clearTimeout(saveTimer.current)
+      saveTimer.current = setTimeout(() => {
+        setSaving(true)
+        updateNoteContent(noteId, editor.getText() === '' ? '' : editor.getHTML())
+          .catch(() => toast.error('Failed to save'))
+          .finally(() => setSaving(false))
+      }, AUTOSAVE_DELAY)
+    },
+    onSelectionUpdate: ({ editor }) => {
+      const { from, to } = editor.state.selection
+      setSelectedText(from === to ? '' : editor.state.doc.textBetween(from, to))
+    },
+  })
+
+  const handleTitleBlur = async () => {
+    if (title !== initialTitle) {
+      await updateNoteTitle(noteId, title, courseId).catch(() => toast.error('Failed to save title'))
+    }
+  }
+
+  React.useEffect(() => () => clearTimeout(saveTimer.current), [])
+
+  const wordCount = editor?.storage.characterCount?.words?.() ?? 0
+
+  return (
+    <div className="flex h-full min-h-0">
+      {/* Editor area */}
+      <div className="flex min-w-0 flex-1 flex-col">
+        {/* Title + toolbar */}
+        <div className="flex items-center gap-2 border-b px-8 py-3">
+          <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            onBlur={handleTitleBlur}
+            onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur() }}
+            placeholder="Untitled note"
+            className="min-w-0 flex-1 bg-transparent text-2xl font-semibold tracking-tight outline-none placeholder:text-muted-foreground/50"
+          />
+          <Button
+            variant={aiOpen ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setAiOpen((v) => !v)}
+            className="shrink-0 gap-1.5"
+          >
+            <Sparkles className="size-4" />
+            <span className="hidden sm:inline">AI</span>
+          </Button>
+        </div>
+
+        {/* Editor */}
+        <div className="relative flex-1 overflow-y-auto">
+          {editor && <EditorBubbleMenu editor={editor} />}
+          <EditorContent editor={editor} className="h-full" />
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-between border-t px-8 py-1.5">
+          <span className="text-muted-foreground text-xs">{wordCount} words</span>
+          <span className={cn('text-xs transition-opacity', saving ? 'text-muted-foreground opacity-100' : 'opacity-0')}>
+            Saving…
+          </span>
+        </div>
+      </div>
+
+      {/* AI Panel */}
+      <AiPanel
+        open={aiOpen}
+        onClose={() => setAiOpen(false)}
+        noteId={noteId}
+        courseId={courseId}
+        topicId={topicId}
+        noteTitle={title}
+        selectedText={selectedText}
+      />
+    </div>
+  )
+}

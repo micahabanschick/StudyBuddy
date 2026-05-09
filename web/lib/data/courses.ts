@@ -8,6 +8,10 @@ export type CourseRow = {
   color: string | null
 }
 
+export type CourseDetail = CourseRow & {
+  _count: { topics: number; notes: number }
+}
+
 export async function getCourses(): Promise<CourseRow[]> {
   try {
     const { db } = await import('@/lib/db')
@@ -16,10 +20,27 @@ export async function getCourses(): Promise<CourseRow[]> {
       select: { id: true, code: true, title: true, term: true, color: true },
     })
   } catch (err) {
-    // In dev, surface the error so misconfigurations aren't silently hidden.
-    if (process.env.NODE_ENV === 'development') {
-      console.error('[getCourses] DB error:', err)
-    }
+    if (process.env.NODE_ENV === 'development') console.error('[getCourses] DB error:', err)
     return []
+  }
+}
+
+export async function getCourse(id: string): Promise<CourseDetail | null> {
+  try {
+    const { db } = await import('@/lib/db')
+    return db.course.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        code: true,
+        title: true,
+        term: true,
+        color: true,
+        _count: { select: { topics: true, notes: true } },
+      },
+    })
+  } catch (err) {
+    if (process.env.NODE_ENV === 'development') console.error('[getCourse] DB error:', err)
+    return null
   }
 }

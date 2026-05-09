@@ -22,7 +22,6 @@ def require_service_secret(
 ) -> None:
     expected = settings.service_secret
     if not expected:
-        # Warn unless explicitly running in local dev mode.
         if settings.app_env not in ("development", "local"):
             logger.warning(
                 "SERVICE_SECRET is not set — internal auth is disabled. "
@@ -40,6 +39,10 @@ def require_user(
     settings: Annotated[Settings, Depends(get_settings)],
     authorization: Annotated[str | None, Header()] = None,
 ) -> CurrentUser:
+    # Local dev bypass — set BYPASS_AUTH=true in .env to skip JWT validation.
+    if settings.bypass_auth:
+        return CurrentUser(id="local-dev-user", email="dev@local")
+
     if not settings.is_supabase_configured:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,

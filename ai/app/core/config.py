@@ -19,12 +19,14 @@ class Settings(BaseSettings):
     anthropic_api_key: str | None = None
 
     service_secret: str | None = None
-    # Comma-separated list of allowed CORS origins, e.g.:
-    # "http://localhost:3000,https://studybuddy.vercel.app,https://deploy-preview-*.vercel.app"
+    # Comma-separated list of allowed CORS origins.
     web_origins: str = "http://localhost:3000"
 
     # Python-native environment flag. Set APP_ENV=production on Fly.io.
     app_env: str = "local"
+
+    # Set BYPASS_AUTH=true in local dev to skip JWT validation.
+    bypass_auth: bool = False
 
     host: str = "0.0.0.0"
     port: int = 8000
