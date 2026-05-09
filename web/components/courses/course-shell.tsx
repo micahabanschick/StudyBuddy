@@ -4,7 +4,7 @@ import * as React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion } from 'motion/react'
-import { BookOpen, FileText, Library, MessageSquare } from 'lucide-react'
+import { BookOpen, FileText, FlaskConical, Library, MessageSquare, Sparkles } from 'lucide-react'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { TopicTree } from '@/components/courses/topic-tree'
 import { NoteList } from '@/components/courses/note-list'
@@ -24,6 +24,8 @@ type Props = {
 const COURSE_TABS = [
   { label: 'Overview', href: (id: string) => `/courses/${id}`, icon: BookOpen, exact: true },
   { label: 'Notes', href: (id: string) => `/courses/${id}/notes`, icon: FileText, exact: false },
+  { label: 'Flashcards', href: (id: string) => `/courses/${id}/flashcards`, icon: Sparkles, exact: false },
+  { label: 'Quizzes', href: (id: string) => `/courses/${id}/quizzes`, icon: FlaskConical, exact: false },
   { label: 'Library', href: (id: string) => `/courses/${id}/library`, icon: Library, exact: false },
   { label: 'Chat', href: (id: string) => `/courses/${id}/chat`, icon: MessageSquare, exact: false },
 ]
