@@ -1,4 +1,5 @@
 import 'server-only'
+import { isDatabaseConfigured } from '@/lib/db'
 
 export type TopicRow = {
   id: string
@@ -9,6 +10,7 @@ export type TopicRow = {
 }
 
 export async function getTopics(courseId: string): Promise<TopicRow[]> {
+  if (!isDatabaseConfigured()) return []
   try {
     const { db } = await import('@/lib/db')
     return db.topic.findMany({

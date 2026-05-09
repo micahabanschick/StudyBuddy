@@ -1,4 +1,5 @@
 import 'server-only'
+import { isDatabaseConfigured } from '@/lib/db'
 
 export type NoteListItem = {
   id: string
@@ -14,6 +15,7 @@ export type NoteRow = NoteListItem & {
 }
 
 export async function getNotes(courseId: string): Promise<NoteListItem[]> {
+  if (!isDatabaseConfigured()) return []
   try {
     const { db } = await import('@/lib/db')
     return db.note.findMany({
@@ -35,6 +37,7 @@ export async function getNotes(courseId: string): Promise<NoteListItem[]> {
 }
 
 export async function getNote(id: string): Promise<NoteRow | null> {
+  if (!isDatabaseConfigured()) return null
   try {
     const { db } = await import('@/lib/db')
     return db.note.findUnique({
@@ -58,6 +61,7 @@ export async function getNote(id: string): Promise<NoteRow | null> {
 export async function getNoteLinks(
   noteId: string,
 ): Promise<{ incoming: NoteListItem[]; outgoing: NoteListItem[] }> {
+  if (!isDatabaseConfigured()) return { incoming: [], outgoing: [] }
   try {
     const { db } = await import('@/lib/db')
     const [incoming, outgoing] = await Promise.all([
@@ -77,11 +81,8 @@ export async function getNoteLinks(
   }
 }
 
-/**
- * Parses [[Note Title]] patterns from markdown, resolves to note IDs,
- * then replaces the outgoing NoteLink set for this note in a transaction.
- */
 export async function syncNoteLinks(fromNoteId: string, contentMd: string): Promise<void> {
+  if (!isDatabaseConfigured()) return
   try {
     const { db } = await import('@/lib/db')
     const pattern = /\[\[([^\]]+)\]\]/g

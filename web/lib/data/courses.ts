@@ -1,4 +1,5 @@
 import 'server-only'
+import { isDatabaseConfigured } from '@/lib/db'
 
 export type CourseRow = {
   id: string
@@ -13,6 +14,7 @@ export type CourseDetail = CourseRow & {
 }
 
 export async function getCourses(): Promise<CourseRow[]> {
+  if (!isDatabaseConfigured()) return []
   try {
     const { db } = await import('@/lib/db')
     return db.course.findMany({
@@ -26,6 +28,7 @@ export async function getCourses(): Promise<CourseRow[]> {
 }
 
 export async function getCourse(id: string): Promise<CourseDetail | null> {
+  if (!isDatabaseConfigured()) return null
   try {
     const { db } = await import('@/lib/db')
     return db.course.findUnique({
