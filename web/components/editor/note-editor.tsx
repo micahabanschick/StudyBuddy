@@ -28,6 +28,10 @@ type Props = {
 
 const AUTOSAVE_DELAY = 800
 
+// Matches $$display math$$ first (group 1), then $inline math$ (group 2).
+// Order matters: $$...$$ must come before $...$ or the shorter pattern wins.
+const MATH_REGEX = /\$\$([\s\S]+?)\$\$|\$([^$\n]+?)\$/gi
+
 export function NoteEditor({ noteId, courseId, topicId, initialTitle, initialContent }: Props) {
   const [title, setTitle] = React.useState(initialTitle)
   const [saving, setSaving] = React.useState(false)
@@ -38,14 +42,29 @@ export function NoteEditor({ noteId, courseId, topicId, initialTitle, initialCon
   const editor = useEditor({
     extensions: [
       StarterKit.configure({ codeBlock: { HTMLAttributes: { class: 'not-prose' } } }),
-      Mathematics,
+      Mathematics.configure({
+        // Match $$display$$ (group 1) OR $inline$ (group 2).
+        // The extension uses the first truthy capture group as content.
+        regex: MATH_REGEX,
+        // shouldRender lets us pass displayMode based on which group matched.
+        shouldRender: (state, pos, node) => {
+          if (!node.isText || !node.text) return false
+          const $pos = state.doc.resolve(pos)
+          return $pos.parent.type.name !== 'codeBlock'
+        },
+        katexOptions: {
+          throwOnError: false,
+          // displayMode is handled per-match in the CSS via data attribute below
+          displayMode: false,
+          trust: true,
+        },
+      }),
       Link.configure({ openOnClick: false }),
       Placeholder.configure({
         placeholder:
           'Start writing… ($math$ for equations, :smiles[CCO]: for chemistry, [[ for backlinks)',
       }),
       CharacterCount,
-      // Serialize to/from markdown so contentMd stores clean markdown, not HTML
       Markdown.configure({ html: false, transformPastedText: true }),
       BacklinkExtension.extend({
         addStorage() {

@@ -381,7 +381,39 @@
   transition: background 0.1s ease;
 }
 
-/* ── Math / KaTeX ── */
+/* ── Math / KaTeX (rendered by @tiptap/extension-mathematics) ── */
+
+/* The extension wraps rendered math in .Tiptap-mathematics-render */
+.ProseMirror .Tiptap-mathematics-render {
+  display: inline;
+  cursor: default;
+  user-select: none;
+}
+
+/* When math contains a display-mode KaTeX tree ($$...$$),
+   render it as a centred block. We detect this via .katex-display inside. */
+.ProseMirror .Tiptap-mathematics-render:has(.katex-display),
+.ProseMirror .Tiptap-mathematics-render .katex-display {
+  display: block;
+  text-align: center;
+  margin: 1.25em 0;
+  overflow-x: auto;
+  padding: 0.75em 1em;
+  background: color-mix(in oklch, var(--primary) 5%, var(--background));
+  border-radius: 0.5rem;
+  border: 1px solid color-mix(in oklch, var(--primary) 15%, var(--border));
+}
+
+/* When cursor is inside a math expression, show the raw source */
+.ProseMirror .Tiptap-mathematics-render--editable {
+  cursor: text;
+  user-select: text;
+  background: color-mix(in oklch, var(--primary) 8%, var(--background));
+  border-radius: 0.25rem;
+  padding: 0.1em 0.3em;
+  border: 1px dashed color-mix(in oklch, var(--primary) 30%, var(--border));
+}
+
 .ProseMirror .katex {
   font-size: 1.05em;
 }
