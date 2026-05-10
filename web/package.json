@@ -36,6 +36,7 @@
     "@serwist/next": "^9.5.11",
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.105.4",
+    "@tailwindcss/typography": "^0.5.19",
     "@tiptap/extension-character-count": "^2.14.0",
     "@tiptap/extension-link": "^2.14.0",
     "@tiptap/extension-mathematics": "^2.14.0",

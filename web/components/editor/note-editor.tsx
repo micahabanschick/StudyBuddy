@@ -57,8 +57,7 @@ export function NoteEditor({ noteId, courseId, topicId, initialTitle, initialCon
     content: initialContent || '',
     editorProps: {
       attributes: {
-        class:
-          'prose prose-sm dark:prose-invert max-w-none focus:outline-none min-h-[60vh] px-8 py-4',
+        class: 'focus:outline-none min-h-[60vh]',
       },
     },
     onUpdate: ({ editor }) => {
