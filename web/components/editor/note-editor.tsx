@@ -4,6 +4,10 @@ import * as React from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
 import { Mathematics } from '@tiptap/extension-mathematics'
+import { Table } from '@tiptap/extension-table'
+import { TableRow } from '@tiptap/extension-table-row'
+import { TableCell } from '@tiptap/extension-table-cell'
+import { TableHeader } from '@tiptap/extension-table-header'
 import { Link } from '@tiptap/extension-link'
 import { Placeholder } from '@tiptap/extension-placeholder'
 import { CharacterCount } from '@tiptap/extension-character-count'
@@ -42,6 +46,10 @@ export function NoteEditor({ noteId, courseId, topicId, initialTitle, initialCon
   const editor = useEditor({
     extensions: [
       StarterKit.configure({ codeBlock: { HTMLAttributes: { class: 'not-prose' } } }),
+      Table.configure({ resizable: false }),
+      TableRow,
+      TableHeader,
+      TableCell,
       Mathematics.configure({
         // Match $$display$$ (group 1) OR $inline$ (group 2).
         // The extension uses the first truthy capture group as content.
