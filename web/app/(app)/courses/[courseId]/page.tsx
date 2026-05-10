@@ -3,12 +3,61 @@ import { ArrowRight, BookOpenText, Calendar, Clock, FileText, Layers, MapPin, Us
 import { notFound } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
 import { getCourse } from '@/lib/data/courses'
 import { getNotes } from '@/lib/data/notes'
-import { getCourseSchedule } from '@/lib/data/schedule'
+import { getCourseSchedule, type SectionInfo } from '@/lib/data/schedule'
 import { formatRelative } from '@/lib/utils'
 
 type Props = { params: Promise<{ courseId: string }> }
+
+function SectionBlock({ label, info }: { label: string; info: SectionInfo }) {
+  if (!info.dates && !info.room) return null
+  return (
+    <div className="flex flex-col gap-2.5">
+      <p className="text-muted-foreground text-[10px] font-bold uppercase tracking-widest">{label}</p>
+      {info.dates && (
+        <div className="flex items-start gap-2">
+          <Calendar className="text-primary mt-0.5 size-3.5 shrink-0" />
+          <div>
+            <p className="text-muted-foreground text-[10px] uppercase tracking-wider">Dates</p>
+            <p className="text-sm font-medium">{info.dates}</p>
+          </div>
+        </div>
+      )}
+      {(info.days || info.time) && (
+        <div className="flex items-start gap-2">
+          <Clock className="text-primary mt-0.5 size-3.5 shrink-0" />
+          <div>
+            <p className="text-muted-foreground text-[10px] uppercase tracking-wider">Time</p>
+            {info.days && <p className="text-sm font-medium">{info.days}</p>}
+            {info.time && <p className="text-muted-foreground text-xs">{info.time}</p>}
+          </div>
+        </div>
+      )}
+      {info.room && (
+        <div className="flex items-start gap-2">
+          <MapPin className="text-primary mt-0.5 size-3.5 shrink-0" />
+          <div>
+            <p className="text-muted-foreground text-[10px] uppercase tracking-wider">Room</p>
+            <p className="text-sm font-medium">{info.room}</p>
+          </div>
+        </div>
+      )}
+      {info.instructor && (
+        <div className="flex items-start gap-2">
+          <User className="text-primary mt-0.5 size-3.5 shrink-0" />
+          <div>
+            <p className="text-muted-foreground text-[10px] uppercase tracking-wider">
+              {info.instructor.includes(',') ? 'Instructors' : 'Instructor'}
+            </p>
+            <p className="text-sm font-medium">{info.instructor}</p>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default async function CourseOverviewPage({ params }: Props) {
   const { courseId } = await params
@@ -20,6 +69,8 @@ export default async function CourseOverviewPage({ params }: Props) {
   if (!course) notFound()
 
   const recent = notes.filter((n) => n.title !== 'Course Overview & Schedule').slice(0, 5)
+  const hasLecture = schedule && (schedule.lecture.dates || schedule.lecture.room)
+  const hasLab = schedule && (schedule.lab.dates || schedule.lab.room)
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-8">
@@ -37,67 +88,33 @@ export default async function CourseOverviewPage({ params }: Props) {
         </Button>
       </header>
 
-      {/* Schedule card */}
-      {schedule && (schedule.dates || schedule.days || schedule.room || schedule.instructors) && (
+      {(hasLecture || hasLab) && schedule && (
         <Card className="mb-5 border-primary/20 from-primary/5 to-primary/0 bg-gradient-to-br">
           <CardHeader className="pb-2 pt-4">
             <CardTitle className="flex items-center gap-1.5 text-sm font-semibold">
-              <Calendar className="text-primary size-4" /> Lab Schedule
+              <Calendar className="text-primary size-4" /> Schedule
             </CardTitle>
           </CardHeader>
-          <CardContent className="grid gap-3 pb-4 sm:grid-cols-2">
-            {schedule.dates && (
-              <div className="flex items-start gap-2.5">
-                <Calendar className="text-muted-foreground mt-0.5 size-3.5 shrink-0" />
-                <div>
-                  <p className="text-muted-foreground text-[10px] font-medium uppercase tracking-wider">Dates</p>
-                  <p className="text-sm font-medium">{schedule.dates}</p>
-                </div>
-              </div>
-            )}
-            {(schedule.days || schedule.time) && (
-              <div className="flex items-start gap-2.5">
-                <Clock className="text-muted-foreground mt-0.5 size-3.5 shrink-0" />
-                <div>
-                  <p className="text-muted-foreground text-[10px] font-medium uppercase tracking-wider">Time</p>
-                  {schedule.days && <p className="text-sm font-medium">{schedule.days}</p>}
-                  {schedule.time && <p className="text-muted-foreground text-xs">{schedule.time}</p>}
-                </div>
-              </div>
-            )}
-            {schedule.room && (
-              <div className="flex items-start gap-2.5">
-                <MapPin className="text-muted-foreground mt-0.5 size-3.5 shrink-0" />
-                <div>
-                  <p className="text-muted-foreground text-[10px] font-medium uppercase tracking-wider">Room</p>
-                  <p className="text-sm font-medium">{schedule.room}</p>
-                </div>
-              </div>
-            )}
-            {schedule.instructors && (
-              <div className="flex items-start gap-2.5">
-                <User className="text-muted-foreground mt-0.5 size-3.5 shrink-0" />
-                <div>
-                  <p className="text-muted-foreground text-[10px] font-medium uppercase tracking-wider">
-                    {schedule.instructors.includes(',') ? 'Instructors' : 'Instructor'}
-                  </p>
-                  <p className="text-sm font-medium">{schedule.instructors}</p>
-                </div>
-              </div>
-            )}
+          <CardContent className="pb-4">
+            <div className="grid gap-5 sm:grid-cols-2">
+              {hasLecture && <SectionBlock label="Lecture" info={schedule.lecture} />}
+              {hasLecture && hasLab && (
+                <Separator orientation="vertical" className="hidden h-auto self-stretch sm:block" />
+              )}
+              {hasLab && <SectionBlock label="Lab" info={schedule.lab} />}
+            </div>
           </CardContent>
           <div className="border-t px-5 py-2.5">
             <Link
               href={`/courses/${courseId}/notes`}
               className="text-primary hover:text-primary/80 text-xs font-medium transition-colors"
             >
-              View full course info →
+              View full course info & instructor details →
             </Link>
           </div>
         </Card>
       )}
 
-      {/* Stats row */}
       <div className="grid gap-4 sm:grid-cols-3">
         <Card>
           <CardHeader className="pb-2">
@@ -131,7 +148,6 @@ export default async function CourseOverviewPage({ params }: Props) {
         </Card>
       </div>
 
-      {/* Recent notes */}
       {recent.length > 0 && (
         <div className="mt-8">
           <h3 className="text-muted-foreground mb-3 text-xs font-medium uppercase tracking-wider">
