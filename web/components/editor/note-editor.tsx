@@ -23,11 +23,19 @@ import { SmilesExtension } from '@/components/editor/extensions/smiles-node'
 import { updateNoteContent, updateNoteTitle } from '@/lib/server/actions/notes'
 import { cn } from '@/lib/utils'
 
-// tiptap-markdown drops image tokens when the Image extension has no explicit
-// markdown handler registered in extension storage. We extend Image here to
-// add a serializer (so getMarkdown() round-trips back to ![alt](url)), then
-// preprocess incoming markdown via injectImageHtml so Tiptap's own parseDOM
-// rule on <img> captures the image nodes reliably regardless of tiptap-markdown version.
+// ─── Image extension ─────────────────────────────────────────────────────────
+// tiptap-markdown (v0.9) has no image token handler in its markdown→DOM pass,
+// so the standard ![alt](url) syntax is silently swallowed. The workaround:
+//  1. prepareContent() replaces every image with a unique text marker BEFORE
+//     tiptap-markdown sees the content.
+//  2. After the editor mounts, replaceImageMarkers() swaps every marker text
+//     node for a real ProseMirror image node via a direct transaction.
+//  3. The custom serialize() on ImageExtension ensures getMarkdown() writes
+//     the nodes back to ![alt](url) on every save.
+
+const IMG_MARKER = 'SBUDDY_IMG_'
+
+// Extend Image so tiptap-markdown serialises image nodes as ![alt](url).
 const ImageExtension = Image.extend({
   addStorage() {
     return {
@@ -41,12 +49,62 @@ const ImageExtension = Image.extend({
   },
 }).configure({ inline: true, allowBase64: false })
 
-function injectImageHtml(md: string): string {
-  return md.replace(
+interface ExtractedImage { src: string; alt: string }
+
+/** Replace ![alt](url) with SBUDDY_IMG_N text markers; return markers + images. */
+function prepareContent(md: string): { content: string; images: ExtractedImage[] } {
+  const images: ExtractedImage[] = []
+  const content = md.replace(
     /!\[([^\]]*)\]\(([^)]+)\)/g,
-    (_, alt, src) => `<img src="${src}" alt="${alt.replace(/"/g, '&quot;')}">`,
+    (_, alt, src) => {
+      const idx = images.length
+      images.push({ src, alt })
+      return `${IMG_MARKER}${idx}`
+    },
   )
+  return { content, images }
 }
+
+/** Walk the ProseMirror doc and replace marker text nodes with image nodes. */
+function replaceImageMarkers(
+  editor: ReturnType<typeof useEditor>,
+  images: ExtractedImage[],
+) {
+  if (!editor || images.length === 0) return
+
+  const { doc, schema } = editor.state
+  const imageType = schema.nodes.image
+  if (!imageType) return
+
+  // Collect replacements first (positions in original doc), then apply from
+  // last → first so earlier positions are not invalidated by later shifts.
+  const hits: Array<{ from: number; to: number; img: ExtractedImage }> = []
+
+  doc.descendants((node, pos) => {
+    if (!node.isText || !node.text) return
+    const re = new RegExp(`${IMG_MARKER}(\\d+)`, 'g')
+    let m: RegExpExecArray | null
+    while ((m = re.exec(node.text)) !== null) {
+      const idx = parseInt(m[1], 10)
+      const img = images[idx]
+      if (!img) continue
+      hits.push({ from: pos + m.index, to: pos + m.index + m[0].length, img })
+    }
+  })
+
+  if (hits.length === 0) return
+
+  // Apply replacements from end to start to keep positions valid.
+  const tr = editor.state.tr.setMeta('addToHistory', false)
+  for (const { from, to, img } of [...hits].reverse()) {
+    const node = imageType.create({ src: img.src, alt: img.alt })
+    tr.replaceRangeWith(from, to, node)
+  }
+
+  editor.view.dispatch(tr)
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 type Props = {
   noteId: string
@@ -58,8 +116,6 @@ type Props = {
 
 const AUTOSAVE_DELAY = 800
 
-// Matches $$display math$$ first (group 1), then $inline math$ (group 2).
-// Order matters: $$...$$ must come before $...$ or the shorter pattern wins.
 const MATH_REGEX = /\$\$([\s\S]+?)\$\$|\$([^$\n]+?)\$/gi
 
 export function NoteEditor({ noteId, courseId, topicId, initialTitle, initialContent }: Props) {
@@ -68,6 +124,15 @@ export function NoteEditor({ noteId, courseId, topicId, initialTitle, initialCon
   const [aiOpen, setAiOpen] = React.useState(false)
   const [selectedText, setSelectedText] = React.useState('')
   const saveTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Prepare content once — markers replace images so tiptap-markdown can parse
+  // the rest of the markdown cleanly, then images are injected after mount.
+  const { content: markedContent, images } = React.useMemo(
+    () => prepareContent(initialContent || ''),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [], // only on first mount; noteId changes unmount/remount the component
+  )
+  const imagesRef = React.useRef(images)
 
   const editor = useEditor({
     extensions: [
@@ -78,21 +143,13 @@ export function NoteEditor({ noteId, courseId, topicId, initialTitle, initialCon
       TableHeader,
       TableCell,
       Mathematics.configure({
-        // Match $$display$$ (group 1) OR $inline$ (group 2).
-        // The extension uses the first truthy capture group as content.
         regex: MATH_REGEX,
-        // shouldRender lets us pass displayMode based on which group matched.
         shouldRender: (state, pos, node) => {
           if (!node.isText || !node.text) return false
           const $pos = state.doc.resolve(pos)
           return $pos.parent.type.name !== 'codeBlock'
         },
-        katexOptions: {
-          throwOnError: false,
-          // displayMode is handled per-match in the CSS via data attribute below
-          displayMode: false,
-          trust: true,
-        },
+        katexOptions: { throwOnError: false, displayMode: false, trust: true },
       }),
       Link.configure({ openOnClick: false }),
       Placeholder.configure({
@@ -100,7 +157,7 @@ export function NoteEditor({ noteId, courseId, topicId, initialTitle, initialCon
           'Start writing… ($math$ for equations, :smiles[CCO]: for chemistry, [[ for backlinks)',
       }),
       CharacterCount,
-      Markdown.configure({ html: true, transformPastedText: true }),
+      Markdown.configure({ html: false, transformPastedText: true }),
       BacklinkExtension.extend({
         addStorage() {
           return { courseId }
@@ -108,11 +165,9 @@ export function NoteEditor({ noteId, courseId, topicId, initialTitle, initialCon
       }),
       SmilesExtension,
     ],
-    content: injectImageHtml(initialContent || ''),
+    content: markedContent,
     editorProps: {
-      attributes: {
-        class: 'focus:outline-none min-h-[60vh]',
-      },
+      attributes: { class: 'focus:outline-none min-h-[60vh]' },
     },
     onUpdate: ({ editor }) => {
       clearTimeout(saveTimer.current ?? undefined)
@@ -129,6 +184,12 @@ export function NoteEditor({ noteId, courseId, topicId, initialTitle, initialCon
       setSelectedText(from === to ? '' : editor.state.doc.textBetween(from, to))
     },
   })
+
+  // Once the editor is ready, swap marker text nodes for real image nodes.
+  React.useEffect(() => {
+    if (!editor) return
+    replaceImageMarkers(editor, imagesRef.current)
+  }, [editor])
 
   const handleTitleBlur = async () => {
     if (title !== initialTitle) {
