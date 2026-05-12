@@ -38,7 +38,7 @@
     "@supabase/supabase-js": "^2.105.4",
     "@tailwindcss/typography": "^0.5.19",
     "@tiptap/extension-character-count": "^2.14.0",
-    "@tiptap/extension-image": "^3.23.1",
+    "@tiptap/extension-image": "^2.27.2",
     "@tiptap/extension-link": "^2.14.0",
     "@tiptap/extension-mathematics": "^2.14.0",
     "@tiptap/extension-placeholder": "^2.14.0",

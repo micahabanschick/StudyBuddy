@@ -27,8 +27,14 @@ FLASHCARD_TOOL = {
                 "items": {
                     "type": "object",
                     "properties": {
-                        "front": {"type": "string", "description": "Question or prompt on the front of the card"},
-                        "back": {"type": "string", "description": "Answer or explanation on the back of the card"},
+                        "front": {
+                            "type": "string",
+                            "description": "Question or prompt on the front of the card",
+                        },
+                        "back": {
+                            "type": "string",
+                            "description": "Answer or explanation on the back of the card",
+                        },
                     },
                     "required": ["front", "back"],
                 },
@@ -77,11 +83,18 @@ def generate(
 
     # Extract tool_use block
     tool_block = next(
-        (b for b in response.content if b.type == "tool_use" and b.name == "save_flashcards"),
+        (
+            b
+            for b in response.content
+            if b.type == "tool_use" and b.name == "save_flashcards"
+        ),
         None,
     )
     if not tool_block:
-        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Model did not return flashcards")
+        raise HTTPException(
+            status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Model did not return flashcards",
+        )
 
     raw = tool_block.input  # type: ignore[attr-defined]
     cards = [FlashcardItem(front=c["front"], back=c["back"]) for c in raw.get("cards", [])]

@@ -199,7 +199,7 @@ export function NoteEditor({ noteId, courseId, topicId, initialTitle, initialCon
     }
   }
 
-  React.useEffect(() => () => clearTimeout(saveTimer.current), [])
+  React.useEffect(() => () => clearTimeout(saveTimer.current ?? undefined), [])
 
   const wordCount = editor?.storage.characterCount?.words?.() ?? 0
 
