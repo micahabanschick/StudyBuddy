@@ -107,12 +107,20 @@ export default async function CourseOverviewPage({ params }: Props) {
             </CardTitle>
           </CardHeader>
           <CardContent className="pb-4">
-            <div className="grid gap-5 sm:grid-cols-2">
-              {hasLecture && <SectionBlock label="Lecture" info={schedule.lecture} />}
-              {hasLecture && hasLab && (
-                <Separator orientation="vertical" className="hidden h-auto self-stretch sm:block" />
+            <div className="flex flex-col gap-5 sm:flex-row">
+              {hasLecture && (
+                <div className="min-w-0 flex-1 self-start">
+                  <SectionBlock label="Lecture" info={schedule.lecture} />
+                </div>
               )}
-              {hasLab && <SectionBlock label="Lab" info={schedule.lab} />}
+              {hasLecture && hasLab && (
+                <Separator orientation="vertical" className="hidden self-stretch sm:block" />
+              )}
+              {hasLab && (
+                <div className="min-w-0 flex-1 self-start">
+                  <SectionBlock label="Lab" info={schedule.lab} />
+                </div>
+              )}
             </div>
           </CardContent>
           <div className="border-t px-5 py-2.5">
