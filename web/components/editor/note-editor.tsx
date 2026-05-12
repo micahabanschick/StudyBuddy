@@ -4,6 +4,7 @@ import * as React from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
 import { Mathematics } from '@tiptap/extension-mathematics'
+import { Image } from '@tiptap/extension-image'
 import { Table } from '@tiptap/extension-table'
 import { TableRow } from '@tiptap/extension-table-row'
 import { TableCell } from '@tiptap/extension-table-cell'
@@ -46,6 +47,7 @@ export function NoteEditor({ noteId, courseId, topicId, initialTitle, initialCon
   const editor = useEditor({
     extensions: [
       StarterKit.configure({ codeBlock: { HTMLAttributes: { class: 'not-prose' } } }),
+      Image.configure({ inline: false, allowBase64: false }),
       Table.configure({ resizable: false }),
       TableRow,
       TableHeader,
