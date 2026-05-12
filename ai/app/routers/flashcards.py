@@ -59,7 +59,7 @@ def generate(
 
     client = anthropic.Anthropic(api_key=settings.anthropic_api_key)
 
-    response = client.messages.create(
+    response = client.messages.create(  # type: ignore[call-overload]
         model="claude-sonnet-4-6",
         max_tokens=4096,
         system=(
@@ -77,7 +77,7 @@ def generate(
                 ),
             }
         ],
-        tools=[FLASHCARD_TOOL],  # type: ignore[list-item]
+        tools=[FLASHCARD_TOOL],
         tool_choice={"type": "tool", "name": "save_flashcards"},
     )
 
@@ -92,7 +92,7 @@ def generate(
             detail="Model did not return flashcards",
         )
 
-    raw = tool_block.input  # type: ignore[attr-defined]
+    raw = tool_block.input
     cards = [FlashcardItem(front=c["front"], back=c["back"]) for c in raw.get("cards", [])]
 
     return FlashcardsGenerateResponse(cards=cards, note_title=body.note_title)

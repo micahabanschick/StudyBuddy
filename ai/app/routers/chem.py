@@ -23,7 +23,7 @@ def smiles_to_svg(smiles: str) -> Response:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, detail="Invalid SMILES string")
 
     drawer = rdMolDraw2D.MolDraw2DSVG(300, 200)
-    drawer.drawOptions().addStereoAnnotation = True
+    drawer.drawOptions().addStereoAnnotation = True  # type: ignore[assignment]
     drawer.DrawMolecule(mol)
     drawer.FinishDrawing()
     svg = drawer.GetDrawingText()

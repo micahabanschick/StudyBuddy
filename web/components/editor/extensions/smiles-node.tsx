@@ -15,10 +15,12 @@ function SmilesView({
 
   React.useEffect(() => {
     if (!node.attrs.smiles) return
-    setError(false)
-    setSvg(null)
     fetch(`/api/ai/chem?smiles=${encodeURIComponent(node.attrs.smiles)}`)
-      .then((r) => (r.ok ? r.text() : Promise.reject(r.status)))
+      .then((r) => {
+        setError(false)
+        setSvg(null)
+        return r.ok ? r.text() : Promise.reject(r.status)
+      })
       .then(setSvg)
       .catch(() => setError(true))
   }, [node.attrs.smiles])
