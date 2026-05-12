@@ -83,11 +83,7 @@ def generate(
 
     # Extract tool_use block
     tool_block = next(
-        (
-            b
-            for b in response.content
-            if b.type == "tool_use" and b.name == "save_flashcards"
-        ),
+        (b for b in response.content if b.type == "tool_use" and b.name == "save_flashcards"),
         None,
     )
     if not tool_block:
@@ -97,8 +93,6 @@ def generate(
         )
 
     raw = tool_block.input  # type: ignore[attr-defined]
-    cards = [
-        FlashcardItem(front=c["front"], back=c["back"]) for c in raw.get("cards", [])
-    ]
+    cards = [FlashcardItem(front=c["front"], back=c["back"]) for c in raw.get("cards", [])]
 
     return FlashcardsGenerateResponse(cards=cards, note_title=body.note_title)

@@ -67,6 +67,7 @@ export async function rateCard(
           ? Rating.Good
           : Rating.Easy
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const result = f.repeat(card as any, now)
   const scheduled = result[fsrsRating]
 
