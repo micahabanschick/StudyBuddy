@@ -23,6 +23,31 @@ import { SmilesExtension } from '@/components/editor/extensions/smiles-node'
 import { updateNoteContent, updateNoteTitle } from '@/lib/server/actions/notes'
 import { cn } from '@/lib/utils'
 
+// tiptap-markdown drops image tokens when the Image extension has no explicit
+// markdown handler registered in extension storage. We extend Image here to
+// add a serializer (so getMarkdown() round-trips back to ![alt](url)), then
+// preprocess incoming markdown via injectImageHtml so Tiptap's own parseDOM
+// rule on <img> captures the image nodes reliably regardless of tiptap-markdown version.
+const ImageExtension = Image.extend({
+  addStorage() {
+    return {
+      markdown: {
+        serialize(state: any, node: any) {
+          const alt = (node.attrs.alt ?? '').replace(/\[/g, '\\[').replace(/\]/g, '\\]')
+          state.write(`![${alt}](${node.attrs.src})`)
+        },
+      },
+    }
+  },
+}).configure({ inline: true, allowBase64: false })
+
+function injectImageHtml(md: string): string {
+  return md.replace(
+    /!\[([^\]]*)\]\(([^)]+)\)/g,
+    (_, alt, src) => `<img src="${src}" alt="${alt.replace(/"/g, '&quot;')}">`,
+  )
+}
+
 type Props = {
   noteId: string
   courseId: string
@@ -47,7 +72,7 @@ export function NoteEditor({ noteId, courseId, topicId, initialTitle, initialCon
   const editor = useEditor({
     extensions: [
       StarterKit.configure({ codeBlock: { HTMLAttributes: { class: 'not-prose' } } }),
-      Image.configure({ inline: true, allowBase64: false }),
+      ImageExtension,
       Table.configure({ resizable: false }),
       TableRow,
       TableHeader,
@@ -75,7 +100,7 @@ export function NoteEditor({ noteId, courseId, topicId, initialTitle, initialCon
           'Start writing… ($math$ for equations, :smiles[CCO]: for chemistry, [[ for backlinks)',
       }),
       CharacterCount,
-      Markdown.configure({ html: false, transformPastedText: true }),
+      Markdown.configure({ html: true, transformPastedText: true }),
       BacklinkExtension.extend({
         addStorage() {
           return { courseId }
@@ -83,7 +108,7 @@ export function NoteEditor({ noteId, courseId, topicId, initialTitle, initialCon
       }),
       SmilesExtension,
     ],
-    content: initialContent || '',
+    content: injectImageHtml(initialContent || ''),
     editorProps: {
       attributes: {
         class: 'focus:outline-none min-h-[60vh]',
