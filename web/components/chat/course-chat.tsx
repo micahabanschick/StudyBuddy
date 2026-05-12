@@ -151,7 +151,11 @@ export function CourseChat({ courseId, course, notes }: Props) {
                       : 'bg-muted text-muted-foreground',
                   )}
                 >
-                  {msg.role === 'user' ? <User className="size-3.5" /> : <Bot className="size-3.5" />}
+                  {msg.role === 'user' ? (
+                    <User className="size-3.5" />
+                  ) : (
+                    <Bot className="size-3.5" />
+                  )}
                 </div>
                 <div
                   className={cn(
@@ -190,7 +194,7 @@ export function CourseChat({ courseId, course, notes }: Props) {
               onKeyDown={handleKeyDown}
               placeholder="Ask a question… (Enter to send, Shift+Enter for new line)"
               rows={1}
-              className="block max-h-[200px] w-full resize-none bg-transparent px-4 py-3 text-sm outline-none placeholder:text-muted-foreground"
+              className="placeholder:text-muted-foreground block max-h-[200px] w-full resize-none bg-transparent px-4 py-3 text-sm outline-none"
               disabled={streaming}
             />
           </div>
@@ -200,7 +204,11 @@ export function CourseChat({ courseId, course, notes }: Props) {
             disabled={!input.trim() || streaming}
             className="h-11 w-11 shrink-0 rounded-xl"
           >
-            {streaming ? <Loader2 className="size-4 animate-spin" /> : <ArrowUp className="size-4" />}
+            {streaming ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <ArrowUp className="size-4" />
+            )}
           </Button>
         </div>
       </div>

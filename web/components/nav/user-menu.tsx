@@ -16,13 +16,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { createClient } from '@/lib/supabase/client'
 
-export function UserMenu({
-  email,
-  initials = 'ME',
-}: {
-  email?: string | null
-  initials?: string
-}) {
+export function UserMenu({ email, initials = 'ME' }: { email?: string | null; initials?: string }) {
   const handleSignOut = async () => {
     try {
       const supabase = createClient()
@@ -47,10 +41,10 @@ export function UserMenu({
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel>
           <div className="flex flex-col gap-0.5">
-            <span className="text-foreground text-xs font-semibold normal-case tracking-normal">
+            <span className="text-foreground text-xs font-semibold tracking-normal normal-case">
               Signed in
             </span>
-            <span className="text-muted-foreground truncate text-xs normal-case tracking-normal">
+            <span className="text-muted-foreground truncate text-xs tracking-normal normal-case">
               {email ?? 'guest@studybuddy.local'}
             </span>
           </div>

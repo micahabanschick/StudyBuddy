@@ -5,11 +5,7 @@ import React from 'react'
 // Usage in markdown: :smiles[CCO]: (ethanol)
 // In ProseMirror, stored as a node with attrs { smiles: "CCO" }
 
-function SmilesView({
-  node,
-}: {
-  node: { attrs: { smiles: string } }
-}) {
+function SmilesView({ node }: { node: { attrs: { smiles: string } } }) {
   const [svg, setSvg] = React.useState<string | null>(null)
   const [error, setError] = React.useState(false)
 

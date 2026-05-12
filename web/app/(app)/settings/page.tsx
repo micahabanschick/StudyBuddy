@@ -13,10 +13,7 @@ export const metadata: Metadata = { title: 'Settings' }
 const OWNER_ID = process.env.OWNER_USER_ID ?? '00000000-0000-0000-0000-000000000000'
 
 export default async function SettingsPage() {
-  const [courses, stats] = await Promise.all([
-    getCourses(),
-    getStudyStats(OWNER_ID),
-  ])
+  const [courses, stats] = await Promise.all([getCourses(), getStudyStats(OWNER_ID)])
 
   return (
     <div className="mx-auto w-full max-w-2xl px-4 py-8 md:px-8">

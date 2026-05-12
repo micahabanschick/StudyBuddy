@@ -81,7 +81,11 @@ export function DocumentLibrary({ courseId, course, documents }: Props) {
           </p>
         </div>
         <Button
-          onClick={() => (supabaseReady ? inputRef.current?.click() : toast.error('Configure Supabase to enable upload'))}
+          onClick={() =>
+            supabaseReady
+              ? inputRef.current?.click()
+              : toast.error('Configure Supabase to enable upload')
+          }
           disabled={uploading}
         >
           {uploading ? <Loader2 className="size-4 animate-spin" /> : <Upload className="size-4" />}
@@ -98,12 +102,21 @@ export function DocumentLibrary({ courseId, course, documents }: Props) {
 
       {/* Drop zone */}
       <div
-        onDragOver={(e) => { e.preventDefault(); setDragging(true) }}
+        onDragOver={(e) => {
+          e.preventDefault()
+          setDragging(true)
+        }}
         onDragLeave={() => setDragging(false)}
-        onDrop={(e) => { e.preventDefault(); setDragging(false); handleFiles(e.dataTransfer.files) }}
+        onDrop={(e) => {
+          e.preventDefault()
+          setDragging(false)
+          handleFiles(e.dataTransfer.files)
+        }}
         onClick={() => inputRef.current?.click()}
         className={`mb-6 flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed py-12 transition-colors ${
-          dragging ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50 hover:bg-muted/30'
+          dragging
+            ? 'border-primary bg-primary/5'
+            : 'border-border hover:border-primary/50 hover:bg-muted/30'
         }`}
       >
         <Upload className="text-muted-foreground mb-3 size-8" />

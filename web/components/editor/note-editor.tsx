@@ -49,27 +49,24 @@ const ImageExtension = Image.extend({
   },
 }).configure({ inline: true, allowBase64: false })
 
-interface ExtractedImage { src: string; alt: string }
+interface ExtractedImage {
+  src: string
+  alt: string
+}
 
 /** Replace ![alt](url) with SBUDDY_IMG_N text markers; return markers + images. */
 function prepareContent(md: string): { content: string; images: ExtractedImage[] } {
   const images: ExtractedImage[] = []
-  const content = md.replace(
-    /!\[([^\]]*)\]\(([^)]+)\)/g,
-    (_, alt, src) => {
-      const idx = images.length
-      images.push({ src, alt })
-      return `${IMG_MARKER}${idx}`
-    },
-  )
+  const content = md.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_, alt, src) => {
+    const idx = images.length
+    images.push({ src, alt })
+    return `${IMG_MARKER}${idx}`
+  })
   return { content, images }
 }
 
 /** Walk the ProseMirror doc and replace marker text nodes with image nodes. */
-function replaceImageMarkers(
-  editor: ReturnType<typeof useEditor>,
-  images: ExtractedImage[],
-) {
+function replaceImageMarkers(editor: ReturnType<typeof useEditor>, images: ExtractedImage[]) {
   if (!editor || images.length === 0) return
 
   const { doc, schema } = editor.state
@@ -215,7 +212,7 @@ export function NoteEditor({ noteId, courseId, topicId, initialTitle, initialCon
               if (e.key === 'Enter') e.currentTarget.blur()
             }}
             placeholder="Untitled note"
-            className="min-w-0 flex-1 bg-transparent text-2xl font-semibold tracking-tight outline-none placeholder:text-muted-foreground/50"
+            className="placeholder:text-muted-foreground/50 min-w-0 flex-1 bg-transparent text-2xl font-semibold tracking-tight outline-none"
           />
           <Button
             variant={aiOpen ? 'default' : 'outline'}

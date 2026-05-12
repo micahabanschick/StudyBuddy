@@ -7,7 +7,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       <div className="app-shell-bg pointer-events-none absolute inset-0 -z-10" />
       <header className="flex h-14 items-center px-6">
         <Link href="/" className="flex items-center gap-2">
-          <span className="bg-primary text-primary-foreground grid size-7 place-items-center rounded-md shadow-sm shadow-primary/40">
+          <span className="bg-primary text-primary-foreground shadow-primary/40 grid size-7 place-items-center rounded-md shadow-sm">
             <Sparkles className="size-4" />
           </span>
           <span className="text-base font-semibold tracking-tight">StudyBuddy</span>

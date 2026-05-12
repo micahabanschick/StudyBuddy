@@ -63,7 +63,7 @@ export function CommandPaletteProvider({ children, courses = [] }: Props) {
       {children}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="overflow-hidden p-0 sm:max-w-xl">
-          <Command className="[&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-2 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wider">
+          <Command className="[&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-2 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:tracking-wider [&_[cmdk-group-heading]]:uppercase">
             <div className="flex items-center border-b px-4">
               <Sparkles className="text-muted-foreground mr-3 size-4" />
               <Command.Input
@@ -110,7 +110,9 @@ export function CommandPaletteProvider({ children, courses = [] }: Props) {
                         />
                         <BookOpen className="text-muted-foreground size-3.5 shrink-0" />
                         <span className="min-w-0 flex-1 truncate">
-                          <span className="font-mono text-xs text-muted-foreground mr-1.5">{c.code}</span>
+                          <span className="text-muted-foreground mr-1.5 font-mono text-xs">
+                            {c.code}
+                          </span>
                           Notes
                         </span>
                       </Command.Item>
@@ -122,7 +124,9 @@ export function CommandPaletteProvider({ children, courses = [] }: Props) {
                         <span className="size-2 shrink-0 rounded-full opacity-0" />
                         <FlaskConical className="text-muted-foreground size-3.5 shrink-0" />
                         <span className="min-w-0 flex-1 truncate">
-                          <span className="font-mono text-xs text-muted-foreground mr-1.5">{c.code}</span>
+                          <span className="text-muted-foreground mr-1.5 font-mono text-xs">
+                            {c.code}
+                          </span>
                           Quiz
                         </span>
                       </Command.Item>
@@ -134,7 +138,9 @@ export function CommandPaletteProvider({ children, courses = [] }: Props) {
                         <span className="size-2 shrink-0 rounded-full opacity-0" />
                         <MessageSquare className="text-muted-foreground size-3.5 shrink-0" />
                         <span className="min-w-0 flex-1 truncate">
-                          <span className="font-mono text-xs text-muted-foreground mr-1.5">{c.code}</span>
+                          <span className="text-muted-foreground mr-1.5 font-mono text-xs">
+                            {c.code}
+                          </span>
                           Chat
                         </span>
                       </Command.Item>

@@ -61,7 +61,7 @@ function DropdownMenuLabel({
   return (
     <DropdownMenuPrimitive.Label
       className={cn(
-        'text-muted-foreground px-2 py-1.5 text-xs font-medium uppercase tracking-wider',
+        'text-muted-foreground px-2 py-1.5 text-xs font-medium tracking-wider uppercase',
         inset && 'pl-8',
         className,
       )}

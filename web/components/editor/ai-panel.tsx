@@ -21,7 +21,15 @@ type Props = {
   selectedText?: string
 }
 
-export function AiPanel({ open, onClose, noteId, courseId, topicId, noteTitle, selectedText }: Props) {
+export function AiPanel({
+  open,
+  onClose,
+  noteId,
+  courseId,
+  topicId,
+  noteTitle,
+  selectedText,
+}: Props) {
   const [summary, setSummary] = React.useState('')
   const [explanation, setExplanation] = React.useState('')
   const [cards, setCards] = React.useState<FlashcardItem[]>([])
@@ -30,11 +38,7 @@ export function AiPanel({ open, onClose, noteId, courseId, topicId, noteTitle, s
   const [loadingCards, setLoadingCards] = React.useState(false)
   const [savingCards, setSavingCards] = React.useState(false)
 
-  const streamResponse = async (
-    url: string,
-    body: object,
-    setSteaming: (s: string) => void,
-  ) => {
+  const streamResponse = async (url: string, body: object, setSteaming: (s: string) => void) => {
     const res = await fetch(url, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -144,7 +148,11 @@ export function AiPanel({ open, onClose, noteId, courseId, topicId, noteTitle, s
             disabled={loadingSummary}
             className="shrink-0"
           >
-            {loadingSummary ? <Loader2 className="size-4 animate-spin" /> : <Sparkles className="size-4" />}
+            {loadingSummary ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <Sparkles className="size-4" />
+            )}
             {loadingSummary ? 'Summarizing…' : 'Summarize note'}
           </Button>
           {summary && (
@@ -162,7 +170,11 @@ export function AiPanel({ open, onClose, noteId, courseId, topicId, noteTitle, s
             disabled={loadingCards}
             className="shrink-0"
           >
-            {loadingCards ? <Loader2 className="size-4 animate-spin" /> : <Sparkles className="size-4" />}
+            {loadingCards ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <Sparkles className="size-4" />
+            )}
             {loadingCards ? 'Generating…' : 'Generate flashcards'}
           </Button>
           {cards.length > 0 && (
@@ -194,14 +206,23 @@ export function AiPanel({ open, onClose, noteId, courseId, topicId, noteTitle, s
         <TabsContent value="explain" className="flex flex-1 flex-col overflow-hidden px-3 pt-2">
           {selectedText ? (
             <>
-              <div className="bg-muted mb-2 rounded-md p-2 text-xs shrink-0">
-                <p className="text-muted-foreground mb-1 font-medium uppercase tracking-wider">
+              <div className="bg-muted mb-2 shrink-0 rounded-md p-2 text-xs">
+                <p className="text-muted-foreground mb-1 font-medium tracking-wider uppercase">
                   Selected text
                 </p>
                 <p className="line-clamp-3">{selectedText}</p>
               </div>
-              <Button size="sm" onClick={handleExplain} disabled={loadingExplain} className="shrink-0">
-                {loadingExplain ? <Loader2 className="size-4 animate-spin" /> : <Sparkles className="size-4" />}
+              <Button
+                size="sm"
+                onClick={handleExplain}
+                disabled={loadingExplain}
+                className="shrink-0"
+              >
+                {loadingExplain ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : (
+                  <Sparkles className="size-4" />
+                )}
                 {loadingExplain ? 'Explaining…' : 'Explain selection'}
               </Button>
               {explanation && (

@@ -5,7 +5,11 @@ import { db, isDatabaseConfigured } from '@/lib/db'
 import { serverEnv, publicEnv } from '@/lib/env'
 
 export async function POST(req: NextRequest) {
-  if (!isDatabaseConfigured() || !publicEnv.NEXT_PUBLIC_SUPABASE_URL || !serverEnv.SUPABASE_SERVICE_ROLE_KEY) {
+  if (
+    !isDatabaseConfigured() ||
+    !publicEnv.NEXT_PUBLIC_SUPABASE_URL ||
+    !serverEnv.SUPABASE_SERVICE_ROLE_KEY
+  ) {
     return NextResponse.json({ error: 'Storage not configured' }, { status: 503 })
   }
 
@@ -39,9 +43,11 @@ export async function POST(req: NextRequest) {
   if (uploadError) {
     console.error('[upload] Supabase storage error:', uploadError)
     return NextResponse.json(
-      { error: uploadError.message.includes('Bucket not found')
+      {
+        error: uploadError.message.includes('Bucket not found')
           ? 'Storage bucket not set up. Create a "course-documents" bucket in Supabase Storage.'
-          : uploadError.message },
+          : uploadError.message,
+      },
       { status: 500 },
     )
   }
@@ -66,7 +72,9 @@ export async function POST(req: NextRequest) {
         'x-service-secret': serverEnv.AI_SERVICE_SECRET ?? '',
       },
       body: JSON.stringify({ documentId: doc.id, storagePath, courseId }),
-    }).catch(() => {/* ingestion is async, errors logged in ai service */})
+    }).catch(() => {
+      /* ingestion is async, errors logged in ai service */
+    })
   }
 
   return NextResponse.json({ document: doc })

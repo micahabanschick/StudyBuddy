@@ -36,7 +36,7 @@ export const serverEnv =
 export function isSupabaseConfigured(): boolean {
   return Boolean(
     publicEnv.NEXT_PUBLIC_SUPABASE_URL &&
-      publicEnv.NEXT_PUBLIC_SUPABASE_ANON_KEY &&
-      !publicEnv.NEXT_PUBLIC_SUPABASE_URL.includes('YOUR-PROJECT'),
+    publicEnv.NEXT_PUBLIC_SUPABASE_ANON_KEY &&
+    !publicEnv.NEXT_PUBLIC_SUPABASE_URL.includes('YOUR-PROJECT'),
   )
 }

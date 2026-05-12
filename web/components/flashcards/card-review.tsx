@@ -63,7 +63,10 @@ export function CardReview({ deckId, cards: initialCards, userId }: Props) {
   React.useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
-      if (!revealed && e.key === ' ') { e.preventDefault(); handleReveal() }
+      if (!revealed && e.key === ' ') {
+        e.preventDefault()
+        handleReveal()
+      }
       if (revealed && ['1', '2', '3', '4'].includes(e.key)) {
         handleRate(parseInt(e.key) as RatingValue)
       }
@@ -75,7 +78,7 @@ export function CardReview({ deckId, cards: initialCards, userId }: Props) {
   if (done) {
     return (
       <div className="flex h-[calc(100svh-3.5rem)] flex-col items-center justify-center gap-6 px-6 text-center">
-        <div className="bg-green-500/10 grid size-20 place-items-center rounded-full">
+        <div className="grid size-20 place-items-center rounded-full bg-green-500/10">
           <CheckCircle className="size-10 text-green-500" />
         </div>
         <div>
@@ -88,9 +91,7 @@ export function CardReview({ deckId, cards: initialCards, userId }: Props) {
           <Button variant="outline" onClick={() => router.push('/review')}>
             Back to review
           </Button>
-          <Button onClick={() => router.refresh()}>
-            Check for more
-          </Button>
+          <Button onClick={() => router.refresh()}>Check for more</Button>
         </div>
       </div>
     )
@@ -101,7 +102,12 @@ export function CardReview({ deckId, cards: initialCards, userId }: Props) {
       {/* Progress bar + header */}
       <div className="shrink-0 border-b px-6 py-3">
         <div className="mb-2 flex items-center justify-between">
-          <Button variant="ghost" size="sm" onClick={() => router.push('/review')} className="gap-1">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => router.push('/review')}
+            className="gap-1"
+          >
             <ChevronLeft className="size-4" /> All decks
           </Button>
           <span className="text-muted-foreground text-sm">
@@ -110,7 +116,7 @@ export function CardReview({ deckId, cards: initialCards, userId }: Props) {
         </div>
         <div className="bg-muted h-1.5 w-full overflow-hidden rounded-full">
           <motion.div
-            className="h-full bg-primary rounded-full"
+            className="bg-primary h-full rounded-full"
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.3 }}
@@ -131,13 +137,13 @@ export function CardReview({ deckId, cards: initialCards, userId }: Props) {
             >
               {/* Front */}
               <div
-                className="bg-card cursor-pointer select-none rounded-2xl border p-8 shadow-sm transition-shadow hover:shadow-md"
+                className="bg-card cursor-pointer rounded-2xl border p-8 shadow-sm transition-shadow select-none hover:shadow-md"
                 onClick={!revealed ? handleReveal : undefined}
               >
-                <p className="text-muted-foreground mb-3 text-center text-xs font-medium uppercase tracking-wider">
+                <p className="text-muted-foreground mb-3 text-center text-xs font-medium tracking-wider uppercase">
                   Question
                 </p>
-                <p className="text-center text-lg font-medium leading-relaxed">{current.front}</p>
+                <p className="text-center text-lg leading-relaxed font-medium">{current.front}</p>
               </div>
 
               {/* Back — revealed after flip */}
@@ -148,7 +154,7 @@ export function CardReview({ deckId, cards: initialCards, userId }: Props) {
                 className={cn('mt-4', !revealed && 'pointer-events-none')}
               >
                 <div className="bg-muted rounded-2xl border p-8">
-                  <p className="text-muted-foreground mb-3 text-center text-xs font-medium uppercase tracking-wider">
+                  <p className="text-muted-foreground mb-3 text-center text-xs font-medium tracking-wider uppercase">
                     Answer
                   </p>
                   <p className="text-center text-base leading-relaxed">{current.back}</p>
@@ -182,7 +188,7 @@ export function CardReview({ deckId, cards: initialCards, userId }: Props) {
                       )}
                     >
                       <span className="text-sm font-semibold">{r.label}</span>
-                      <kbd className="bg-white/20 rounded px-1.5 text-[10px]">{r.key}</kbd>
+                      <kbd className="rounded bg-white/20 px-1.5 text-[10px]">{r.key}</kbd>
                     </button>
                   ))}
                 </div>

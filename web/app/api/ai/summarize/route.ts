@@ -10,12 +10,14 @@ export async function POST(req: NextRequest) {
   const { noteId } = (await req.json()) as { noteId: string }
   const note = await getNote(noteId)
   if (!note) return new Response('Note not found', { status: 404 })
-  if (!serverEnv.ANTHROPIC_API_KEY) return new Response('ANTHROPIC_API_KEY not configured', { status: 503 })
+  if (!serverEnv.ANTHROPIC_API_KEY)
+    return new Response('ANTHROPIC_API_KEY not configured', { status: 503 })
 
   const stream = client.messages.stream({
     model: 'claude-sonnet-4-6',
     max_tokens: 1024,
-    system: 'You are an expert study assistant. Summarize the following note concisely, highlighting the key concepts and takeaways. Use markdown.',
+    system:
+      'You are an expert study assistant. Summarize the following note concisely, highlighting the key concepts and takeaways. Use markdown.',
     messages: [
       {
         role: 'user',
@@ -27,10 +29,7 @@ export async function POST(req: NextRequest) {
   const readable = new ReadableStream({
     async start(controller) {
       for await (const chunk of stream) {
-        if (
-          chunk.type === 'content_block_delta' &&
-          chunk.delta.type === 'text_delta'
-        ) {
+        if (chunk.type === 'content_block_delta' && chunk.delta.type === 'text_delta') {
           controller.enqueue(new TextEncoder().encode(chunk.delta.text))
         }
       }

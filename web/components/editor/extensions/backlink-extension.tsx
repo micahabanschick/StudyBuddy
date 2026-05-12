@@ -35,7 +35,11 @@ export const BacklinkExtension = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['span', mergeAttributes(HTMLAttributes, { 'data-backlink': '' }), `[[${HTMLAttributes.label}]]`]
+    return [
+      'span',
+      mergeAttributes(HTMLAttributes, { 'data-backlink': '' }),
+      `[[${HTMLAttributes.label}]]`,
+    ]
   },
 
   addNodeView() {
@@ -54,7 +58,10 @@ export const BacklinkExtension = Node.create({
             .deleteRange(range)
             .insertContent({
               type: 'backlink',
-              attrs: { id: (props as { id: string; label: string }).id, label: (props as { id: string; label: string }).label },
+              attrs: {
+                id: (props as { id: string; label: string }).id,
+                label: (props as { id: string; label: string }).label,
+              },
             })
             .insertContent(' ')
             .run()
@@ -113,7 +120,11 @@ export const BacklinkExtension = Node.create({
 
 function renderSuggestions(
   popup: HTMLElement,
-  props: { items: Array<{ id: string; title: string }>; command: (item: { id: string; label: string }) => void; clientRect?: (() => DOMRect | null) | null },
+  props: {
+    items: Array<{ id: string; title: string }>
+    command: (item: { id: string; label: string }) => void
+    clientRect?: (() => DOMRect | null) | null
+  },
 ) {
   const rect = props.clientRect?.()
   if (rect) {
@@ -123,8 +134,7 @@ function renderSuggestions(
 
   popup.innerHTML = ''
   if (!props.items.length) {
-    popup.innerHTML =
-      '<p class="text-muted-foreground px-2 py-1.5 text-sm">No notes found</p>'
+    popup.innerHTML = '<p class="text-muted-foreground px-2 py-1.5 text-sm">No notes found</p>'
     return
   }
   props.items.forEach((item) => {

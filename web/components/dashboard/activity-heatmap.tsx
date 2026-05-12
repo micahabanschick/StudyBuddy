@@ -18,7 +18,20 @@ export function ActivityHeatmap({ data }: { data: DailyActivity[] }) {
     weeks.push(data.slice(i, i + 7))
   }
 
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ]
   const days = ['', 'Mon', '', 'Wed', '', 'Fri', '']
 
   return (
@@ -66,7 +79,9 @@ export function ActivityHeatmap({ data }: { data: DailyActivity[] }) {
                     </TooltipTrigger>
                     <TooltipContent>
                       <p className="text-xs">
-                        {day.count === 0 ? 'No reviews' : `${day.count} review${day.count === 1 ? '' : 's'}`}
+                        {day.count === 0
+                          ? 'No reviews'
+                          : `${day.count} review${day.count === 1 ? '' : 's'}`}
                         {' — '}
                         {new Date(day.date + 'T00:00:00').toLocaleDateString('en-US', {
                           month: 'short',

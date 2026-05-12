@@ -172,14 +172,26 @@ async function main() {
   await db.note.upsert({
     where: { id: 'bio-n-overview' },
     update: { title: 'Course Overview & Schedule', contentMd: BIO_MD },
-    create: { id: 'bio-n-overview', courseId: BIO_ID, topicId: null, title: 'Course Overview & Schedule', contentMd: BIO_MD },
+    create: {
+      id: 'bio-n-overview',
+      courseId: BIO_ID,
+      topicId: null,
+      title: 'Course Overview & Schedule',
+      contentMd: BIO_MD,
+    },
   })
 
   console.log('Updating CHEM 1128Q course overview note...')
   await db.note.upsert({
     where: { id: 'chem-n-overview' },
     update: { title: 'Course Overview & Schedule', contentMd: CHEM_MD },
-    create: { id: 'chem-n-overview', courseId: CHEM_ID, topicId: null, title: 'Course Overview & Schedule', contentMd: CHEM_MD },
+    create: {
+      id: 'chem-n-overview',
+      courseId: CHEM_ID,
+      topicId: null,
+      title: 'Course Overview & Schedule',
+      contentMd: CHEM_MD,
+    },
   })
 
   await db.course.update({
@@ -195,5 +207,8 @@ async function main() {
 }
 
 main()
-  .catch((e) => { console.error(e); process.exit(1) })
+  .catch((e) => {
+    console.error(e)
+    process.exit(1)
+  })
   .finally(() => db.$disconnect().then(() => pool.end()))

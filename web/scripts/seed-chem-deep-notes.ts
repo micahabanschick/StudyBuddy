@@ -6,16 +6,20 @@ import { PrismaClient } from '@prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
 import { Pool } from 'pg'
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } })
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
+})
 const db = new PrismaClient({ adapter: new PrismaPg(pool) })
 const CHEM_ID = 'seed-chem-1128q'
 
 const NOTES: Array<{ id: string; topicId: string; title: string; contentMd: string }> = [
-
-// ─── Ch 11 — SOLUTIONS ───────────────────────────────────────────────────────
-{
-  id: 'chem-n-07', topicId: 'chem-t-01', title: 'Solutions & Colligative Properties',
-  contentMd: `# Solutions & Colligative Properties
+  // ─── Ch 11 — SOLUTIONS ───────────────────────────────────────────────────────
+  {
+    id: 'chem-n-07',
+    topicId: 'chem-t-01',
+    title: 'Solutions & Colligative Properties',
+    contentMd: `# Solutions & Colligative Properties
 *OpenStax Chemistry 2e — Chapter 11*
 
 ---
@@ -156,12 +160,14 @@ $M$ = molarity, $R$ = 0.08206 L·atm/mol·K, $T$ in Kelvin
 
 **Soap/detergent mechanism:** Nonpolar hydrocarbon tail dissolves in grease; ionic head faces water — bridges oil and water for emulsification.
 `,
-},
+  },
 
-// ─── Ch 12 — KINETICS (deepened) ─────────────────────────────────────────────
-{
-  id: 'chem-n-06', topicId: 'chem-t-02', title: 'Chemical Kinetics — Rate Laws & Mechanisms',
-  contentMd: `# Chemical Kinetics
+  // ─── Ch 12 — KINETICS (deepened) ─────────────────────────────────────────────
+  {
+    id: 'chem-n-06',
+    topicId: 'chem-t-02',
+    title: 'Chemical Kinetics — Rate Laws & Mechanisms',
+    contentMd: `# Chemical Kinetics
 *OpenStax Chemistry 2e — Chapter 12*
 
 ---
@@ -307,12 +313,14 @@ Rate law: rate $= k[\\text{acetone}]^m[\\text{H}^+]^n[\\text{I}_2]^p$
 
 The experiment reveals: reaction is **zero order in I₂** — rate is independent of $[\\text{I}_2]$. This demonstrates that rate orders cannot be assumed from stoichiometry.
 `,
-},
+  },
 
-// ─── Ch 13 — EQUILIBRIUM (deepened) ──────────────────────────────────────────
-{
-  id: 'chem-n-01', topicId: 'chem-t-03', title: 'Chemical Equilibrium — K Expressions & ICE Tables',
-  contentMd: `# Chemical Equilibrium
+  // ─── Ch 13 — EQUILIBRIUM (deepened) ──────────────────────────────────────────
+  {
+    id: 'chem-n-01',
+    topicId: 'chem-t-03',
+    title: 'Chemical Equilibrium — K Expressions & ICE Tables',
+    contentMd: `# Chemical Equilibrium
 *OpenStax Chemistry 2e — Chapter 13*
 
 ---
@@ -449,12 +457,14 @@ If initial concentrations are [PCl₃] = 0.20 M, [Cl₂] = 0.10 M:
 4. Solve quadratic for $x$
 5. Verify: plug back into $K$ expression
 `,
-},
+  },
 
-// ─── Ch 14/15 — ACID-BASE (deepened) ────────────────────────────────────────
-{
-  id: 'chem-n-03', topicId: 'chem-t-04', title: 'Acid-Base Chemistry — pH, Ka, Kb, Salt Hydrolysis',
-  contentMd: `# Acid-Base Chemistry
+  // ─── Ch 14/15 — ACID-BASE (deepened) ────────────────────────────────────────
+  {
+    id: 'chem-n-03',
+    topicId: 'chem-t-04',
+    title: 'Acid-Base Chemistry — pH, Ka, Kb, Salt Hydrolysis',
+    contentMd: `# Acid-Base Chemistry
 *OpenStax Chemistry 2e — Chapter 14*
 
 ---
@@ -581,12 +591,14 @@ $$K_a(\\text{cation}) = \\frac{K_w}{K_b(\\text{parent base})}$$
 **Hydrated metal ions act as acids** — strength increases with higher charge and smaller ionic radius:
 $$\\text{Al}(\\text{H}_2\\text{O})_6^{3+}(aq) + \\text{H}_2\\text{O} \\rightleftharpoons \\text{H}_3\\text{O}^+(aq) + \\text{Al}(\\text{H}_2\\text{O})_5(\\text{OH})^{2+}(aq)$$
 `,
-},
+  },
 
-// ─── Ch 14 — BUFFERS & TITRATIONS (deepened) ────────────────────────────────
-{
-  id: 'chem-n-04', topicId: 'chem-t-05', title: 'Buffers & Titrations',
-  contentMd: `# Buffers & Titrations
+  // ─── Ch 14 — BUFFERS & TITRATIONS (deepened) ────────────────────────────────
+  {
+    id: 'chem-n-04',
+    topicId: 'chem-t-05',
+    title: 'Buffers & Titrations',
+    contentMd: `# Buffers & Titrations
 *OpenStax Chemistry 2e — Chapter 14 (Sections 14.6–14.7)*
 
 ---
@@ -695,12 +707,14 @@ p$K_a$ = −log(1.4×10⁻⁴) = 3.85
 
 $$\\text{pH} = 3.85 + \\log\\frac{0.2676}{0.2776} = 3.85 - 0.016 = 3.83$$
 `,
-},
+  },
 
-// ─── Ch 15 — Ksp & COUPLED EQUILIBRIA (deepened) ────────────────────────────
-{
-  id: 'chem-n-05', topicId: 'chem-t-06', title: 'Solubility Equilibria — Ksp & Coupled Equilibria',
-  contentMd: `# Solubility Equilibria
+  // ─── Ch 15 — Ksp & COUPLED EQUILIBRIA (deepened) ────────────────────────────
+  {
+    id: 'chem-n-05',
+    topicId: 'chem-t-06',
+    title: 'Solubility Equilibria — Ksp & Coupled Equilibria',
+    contentMd: `# Solubility Equilibria
 *OpenStax Chemistry 2e — Chapter 15*
 
 ---
@@ -810,12 +824,14 @@ As CO₂ increases → pH drops → CaCO₃ dissolution increases → coral/shel
 
 **Amphoteric Al(OH)₃:** Dissolves in both acid AND base due to coupled equilibria.
 `,
-},
+  },
 
-// ─── Ch 16 — THERMODYNAMICS (new) ────────────────────────────────────────────
-{
-  id: 'chem-n-08', topicId: 'chem-t-03', title: 'Thermodynamics — Entropy, Gibbs Free Energy & K',
-  contentMd: `# Thermodynamics
+  // ─── Ch 16 — THERMODYNAMICS (new) ────────────────────────────────────────────
+  {
+    id: 'chem-n-08',
+    topicId: 'chem-t-03',
+    title: 'Thermodynamics — Entropy, Gibbs Free Energy & K',
+    contentMd: `# Thermodynamics
 *OpenStax Chemistry 2e — Chapter 16*
 
 ---
@@ -922,12 +938,14 @@ $$K = e^{-\\Delta G°/RT}$$
 - A reaction can be thermodynamically spontaneous but kinetically very slow (diamond → graphite)
 - A catalyst lowers $E_a$ but does NOT change $\\Delta G°$ or $K$
 `,
-},
+  },
 
-// ─── Ch 17 — ELECTROCHEMISTRY (new) ──────────────────────────────────────────
-{
-  id: 'chem-n-09', topicId: 'chem-t-07', title: 'Electrochemistry — Galvanic Cells, Potentials & Nernst',
-  contentMd: `# Electrochemistry
+  // ─── Ch 17 — ELECTROCHEMISTRY (new) ──────────────────────────────────────────
+  {
+    id: 'chem-n-09',
+    topicId: 'chem-t-07',
+    title: 'Electrochemistry — Galvanic Cells, Potentials & Nernst',
+    contentMd: `# Electrochemistry
 *OpenStax Chemistry 2e — Chapter 17*
 
 ---
@@ -1079,8 +1097,7 @@ $$n_{e^-} = \\frac{Q}{F} = \\frac{It}{96{,}485}$$
 
 **Industrial applications:** Downs process (Na from NaCl), chlor-alkali (Cl₂ + NaOH), water electrolysis, electroplating (Ag, Cu, Cr, Au).
 `,
-},
-
+  },
 ] // end NOTES array
 
 async function main() {
@@ -1089,12 +1106,21 @@ async function main() {
     await db.note.upsert({
       where: { id: n.id },
       update: { title: n.title, contentMd: n.contentMd, topicId: n.topicId },
-      create: { id: n.id, courseId: CHEM_ID, topicId: n.topicId, title: n.title, contentMd: n.contentMd },
+      create: {
+        id: n.id,
+        courseId: CHEM_ID,
+        topicId: n.topicId,
+        title: n.title,
+        contentMd: n.contentMd,
+      },
     })
   }
   console.log(`\nDone — ${NOTES.length} notes written.`)
 }
 
 main()
-  .catch(e => { console.error(e); process.exit(1) })
+  .catch((e) => {
+    console.error(e)
+    process.exit(1)
+  })
   .finally(() => db.$disconnect().then(() => pool.end()))

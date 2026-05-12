@@ -25,8 +25,8 @@ export default async function ChatPage() {
               <MessageSquare className="size-4" /> No courses yet
             </CardTitle>
             <CardDescription>
-              Create a course first, then use the Chat tab inside the course to ask questions.
-              Each course has its own AI chat grounded in your notes.
+              Create a course first, then use the Chat tab inside the course to ask questions. Each
+              course has its own AI chat grounded in your notes.
             </CardDescription>
           </CardHeader>
         </Card>

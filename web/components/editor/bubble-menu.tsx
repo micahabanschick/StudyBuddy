@@ -69,7 +69,9 @@ export function EditorBubbleMenu({ editor }: { editor: Editor }) {
               placeholder="https://..."
               value={linkUrl}
               onChange={(e) => setLinkUrl(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') setLink() }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') setLink()
+              }}
               className="h-7 text-sm"
               autoFocus
             />

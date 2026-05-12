@@ -6,7 +6,7 @@ export default function NoteLoading() {
       <div className="border-b px-8 py-4">
         <Skeleton className="h-8 w-64" />
       </div>
-      <div className="flex-1 px-8 py-4 space-y-3">
+      <div className="flex-1 space-y-3 px-8 py-4">
         {[80, 65, 90, 55, 70, 60, 45, 75].map((w, i) => (
           <Skeleton key={i} className="h-4" style={{ width: `${w}%` }} />
         ))}

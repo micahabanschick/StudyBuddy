@@ -130,17 +130,19 @@ export function QuizGenerator({ courseId, course, notes }: Props) {
   }
 
   if (state === 'active' && q) {
-    const progress = Math.round(((current) / questions.length) * 100)
+    const progress = Math.round((current / questions.length) * 100)
     return (
       <div className="flex h-full flex-col">
         <div className="shrink-0 border-b px-6 py-3">
           <div className="mb-2 flex items-center justify-between">
             <span className="text-muted-foreground text-sm font-medium">{course.code} Quiz</span>
-            <span className="text-muted-foreground text-sm">{current + 1} / {questions.length}</span>
+            <span className="text-muted-foreground text-sm">
+              {current + 1} / {questions.length}
+            </span>
           </div>
           <div className="bg-muted h-1.5 w-full overflow-hidden rounded-full">
             <motion.div
-              className="h-full bg-primary rounded-full"
+              className="bg-primary h-full rounded-full"
               animate={{ width: `${progress}%` }}
               transition={{ duration: 0.3 }}
             />
@@ -157,10 +159,10 @@ export function QuizGenerator({ courseId, course, notes }: Props) {
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.2 }}
               >
-                <p className="text-muted-foreground mb-4 text-xs font-medium uppercase tracking-wider">
+                <p className="text-muted-foreground mb-4 text-xs font-medium tracking-wider uppercase">
                   {q.type === 'mcq' ? 'Multiple choice' : 'Free response'}
                 </p>
-                <p className="mb-6 text-lg font-medium leading-relaxed">{q.prompt}</p>
+                <p className="mb-6 text-lg leading-relaxed font-medium">{q.prompt}</p>
 
                 {q.type === 'mcq' && q.choices ? (
                   <div className="flex flex-col gap-2">
@@ -173,16 +175,26 @@ export function QuizGenerator({ courseId, course, notes }: Props) {
                           onClick={() => handleSelect(choice)}
                           className={cn(
                             'w-full rounded-xl border px-4 py-3 text-left text-sm transition-all',
-                            !revealed && 'hover:border-primary/50 hover:bg-accent/30 cursor-pointer',
-                            revealed && isCorrect && 'border-green-500 bg-green-500/10 text-green-700 dark:text-green-400',
-                            revealed && isSelected && !isCorrect && 'border-red-500 bg-red-500/10 text-red-700 dark:text-red-400',
+                            !revealed &&
+                              'hover:border-primary/50 hover:bg-accent/30 cursor-pointer',
+                            revealed &&
+                              isCorrect &&
+                              'border-green-500 bg-green-500/10 text-green-700 dark:text-green-400',
+                            revealed &&
+                              isSelected &&
+                              !isCorrect &&
+                              'border-red-500 bg-red-500/10 text-red-700 dark:text-red-400',
                             !revealed && isSelected && 'border-primary bg-primary/10',
                             revealed && 'cursor-default',
                           )}
                         >
                           <div className="flex items-center gap-2">
-                            {revealed && isCorrect && <CheckCircle className="size-4 text-green-500 shrink-0" />}
-                            {revealed && isSelected && !isCorrect && <XCircle className="size-4 text-red-500 shrink-0" />}
+                            {revealed && isCorrect && (
+                              <CheckCircle className="size-4 shrink-0 text-green-500" />
+                            )}
+                            {revealed && isSelected && !isCorrect && (
+                              <XCircle className="size-4 shrink-0 text-red-500" />
+                            )}
                             {choice}
                           </div>
                         </button>
@@ -190,7 +202,7 @@ export function QuizGenerator({ courseId, course, notes }: Props) {
                     })}
                   </div>
                 ) : (
-                  <div className="bg-muted rounded-xl border p-4 text-sm text-muted-foreground italic">
+                  <div className="bg-muted text-muted-foreground rounded-xl border p-4 text-sm italic">
                     Free response — think through your answer, then reveal.
                   </div>
                 )}
@@ -201,12 +213,16 @@ export function QuizGenerator({ courseId, course, notes }: Props) {
                     animate={{ opacity: 1, y: 0 }}
                     className="bg-muted mt-4 rounded-xl border p-4"
                   >
-                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">Explanation</p>
+                    <p className="text-muted-foreground mb-1 text-xs font-medium tracking-wider uppercase">
+                      Explanation
+                    </p>
                     <p className="text-sm">{q.explanation}</p>
                     {q.type === 'free_response' && (
                       <>
-                        <p className="mt-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">Model answer</p>
-                        <p className="text-sm mt-1">{q.answer}</p>
+                        <p className="text-muted-foreground mt-3 text-xs font-medium tracking-wider uppercase">
+                          Model answer
+                        </p>
+                        <p className="mt-1 text-sm">{q.answer}</p>
                       </>
                     )}
                   </motion.div>
@@ -214,10 +230,7 @@ export function QuizGenerator({ courseId, course, notes }: Props) {
 
                 <div className="mt-6 flex justify-end gap-3">
                   {!revealed ? (
-                    <Button
-                      onClick={handleReveal}
-                      disabled={q.type === 'mcq' && !selected}
-                    >
+                    <Button onClick={handleReveal} disabled={q.type === 'mcq' && !selected}>
                       Reveal answer
                     </Button>
                   ) : (
@@ -256,8 +269,8 @@ export function QuizGenerator({ courseId, course, notes }: Props) {
             </p>
           ) : (
             <p className="text-muted-foreground text-sm">
-              {notes.length} note{notes.length === 1 ? '' : 's'} available.
-              Claude will generate a mix of multiple-choice and free-response questions.
+              {notes.length} note{notes.length === 1 ? '' : 's'} available. Claude will generate a
+              mix of multiple-choice and free-response questions.
             </p>
           )}
 
@@ -285,9 +298,13 @@ export function QuizGenerator({ courseId, course, notes }: Props) {
             size="lg"
           >
             {state === 'generating' ? (
-              <><Loader2 className="size-4 animate-spin" /> Generating…</>
+              <>
+                <Loader2 className="size-4 animate-spin" /> Generating…
+              </>
             ) : (
-              <><Sparkles className="size-4" /> Start {count}-question quiz</>
+              <>
+                <Sparkles className="size-4" /> Start {count}-question quiz
+              </>
             )}
           </Button>
         </CardContent>

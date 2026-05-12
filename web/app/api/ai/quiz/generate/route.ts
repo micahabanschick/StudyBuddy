@@ -66,9 +66,7 @@ export async function POST(req: NextRequest) {
     tool_choice: { type: 'tool', name: 'save_quiz' },
   })
 
-  const toolBlock = response.content.find(
-    (b) => b.type === 'tool_use' && b.name === 'save_quiz',
-  )
+  const toolBlock = response.content.find((b) => b.type === 'tool_use' && b.name === 'save_quiz')
   if (!toolBlock || toolBlock.type !== 'tool_use')
     return NextResponse.json({ error: 'Model did not return questions' }, { status: 500 })
 

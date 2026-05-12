@@ -1,5 +1,14 @@
 import Link from 'next/link'
-import { ArrowRight, BookOpenText, Calendar, Clock, FileText, Layers, MapPin, User } from 'lucide-react'
+import {
+  ArrowRight,
+  BookOpenText,
+  Calendar,
+  Clock,
+  FileText,
+  Layers,
+  MapPin,
+  User,
+} from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -15,12 +24,14 @@ function SectionBlock({ label, info }: { label: string; info: SectionInfo }) {
   if (!info.dates && !info.room) return null
   return (
     <div className="flex flex-col gap-2.5">
-      <p className="text-muted-foreground text-[10px] font-bold uppercase tracking-widest">{label}</p>
+      <p className="text-muted-foreground text-[10px] font-bold tracking-widest uppercase">
+        {label}
+      </p>
       {info.dates && (
         <div className="flex items-start gap-2">
           <Calendar className="text-primary mt-0.5 size-3.5 shrink-0" />
           <div>
-            <p className="text-muted-foreground text-[10px] uppercase tracking-wider">Dates</p>
+            <p className="text-muted-foreground text-[10px] tracking-wider uppercase">Dates</p>
             <p className="text-sm font-medium">{info.dates}</p>
           </div>
         </div>
@@ -29,7 +40,7 @@ function SectionBlock({ label, info }: { label: string; info: SectionInfo }) {
         <div className="flex items-start gap-2">
           <Clock className="text-primary mt-0.5 size-3.5 shrink-0" />
           <div>
-            <p className="text-muted-foreground text-[10px] uppercase tracking-wider">Time</p>
+            <p className="text-muted-foreground text-[10px] tracking-wider uppercase">Time</p>
             {info.days && <p className="text-sm font-medium">{info.days}</p>}
             {info.time && <p className="text-muted-foreground text-xs">{info.time}</p>}
           </div>
@@ -39,7 +50,7 @@ function SectionBlock({ label, info }: { label: string; info: SectionInfo }) {
         <div className="flex items-start gap-2">
           <MapPin className="text-primary mt-0.5 size-3.5 shrink-0" />
           <div>
-            <p className="text-muted-foreground text-[10px] uppercase tracking-wider">Room</p>
+            <p className="text-muted-foreground text-[10px] tracking-wider uppercase">Room</p>
             <p className="text-sm font-medium">{info.room}</p>
           </div>
         </div>
@@ -48,7 +59,7 @@ function SectionBlock({ label, info }: { label: string; info: SectionInfo }) {
         <div className="flex items-start gap-2">
           <User className="text-primary mt-0.5 size-3.5 shrink-0" />
           <div>
-            <p className="text-muted-foreground text-[10px] uppercase tracking-wider">
+            <p className="text-muted-foreground text-[10px] tracking-wider uppercase">
               {info.instructor.includes(',') ? 'Instructors' : 'Instructor'}
             </p>
             <p className="text-sm font-medium">{info.instructor}</p>
@@ -76,7 +87,7 @@ export default async function CourseOverviewPage({ params }: Props) {
     <div className="mx-auto w-full max-w-3xl px-4 py-8">
       <header className="mb-6 flex items-start justify-between">
         <div>
-          <p className="text-muted-foreground font-mono text-xs uppercase tracking-widest">
+          <p className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
             {course.code} · {course.term ?? ''}
           </p>
           <h2 className="text-2xl font-semibold tracking-tight">{course.title}</h2>
@@ -89,8 +100,8 @@ export default async function CourseOverviewPage({ params }: Props) {
       </header>
 
       {(hasLecture || hasLab) && schedule && (
-        <Card className="mb-5 border-primary/20 from-primary/5 to-primary/0 bg-gradient-to-br">
-          <CardHeader className="pb-2 pt-4">
+        <Card className="border-primary/20 from-primary/5 to-primary/0 mb-5 bg-gradient-to-br">
+          <CardHeader className="pt-4 pb-2">
             <CardTitle className="flex items-center gap-1.5 text-sm font-semibold">
               <Calendar className="text-primary size-4" /> Schedule
             </CardTitle>
@@ -118,7 +129,7 @@ export default async function CourseOverviewPage({ params }: Props) {
       <div className="grid gap-4 sm:grid-cols-3">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-muted-foreground flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider">
+            <CardTitle className="text-muted-foreground flex items-center gap-1.5 text-xs font-medium tracking-wider uppercase">
               <FileText className="size-3.5" /> Notes
             </CardTitle>
           </CardHeader>
@@ -128,7 +139,7 @@ export default async function CourseOverviewPage({ params }: Props) {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-muted-foreground flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider">
+            <CardTitle className="text-muted-foreground flex items-center gap-1.5 text-xs font-medium tracking-wider uppercase">
               <Layers className="size-3.5" /> Topics
             </CardTitle>
           </CardHeader>
@@ -138,7 +149,7 @@ export default async function CourseOverviewPage({ params }: Props) {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-muted-foreground flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider">
+            <CardTitle className="text-muted-foreground flex items-center gap-1.5 text-xs font-medium tracking-wider uppercase">
               <BookOpenText className="size-3.5" /> Decks
             </CardTitle>
           </CardHeader>
@@ -150,7 +161,7 @@ export default async function CourseOverviewPage({ params }: Props) {
 
       {recent.length > 0 && (
         <div className="mt-8">
-          <h3 className="text-muted-foreground mb-3 text-xs font-medium uppercase tracking-wider">
+          <h3 className="text-muted-foreground mb-3 text-xs font-medium tracking-wider uppercase">
             Recent notes
           </h3>
           <div className="flex flex-col gap-1">

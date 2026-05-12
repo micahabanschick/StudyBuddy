@@ -22,7 +22,10 @@ export function CourseCard({ course }: { course: Course }) {
   return (
     <>
       <div className="hover:border-primary/50 group relative rounded-xl border transition-colors">
-        <Link href={`/courses/${course.id}`} className="hover:bg-accent/40 block p-4 transition-colors">
+        <Link
+          href={`/courses/${course.id}`}
+          className="hover:bg-accent/40 block p-4 transition-colors"
+        >
           <div className="mb-2 flex items-center gap-2">
             <span
               className="size-2 rounded-full"

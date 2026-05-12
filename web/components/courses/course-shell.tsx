@@ -24,8 +24,18 @@ type Props = {
 const COURSE_TABS = [
   { label: 'Overview', href: (id: string) => `/courses/${id}`, icon: BookOpen, exact: true },
   { label: 'Notes', href: (id: string) => `/courses/${id}/notes`, icon: FileText, exact: false },
-  { label: 'Flashcards', href: (id: string) => `/courses/${id}/flashcards`, icon: Sparkles, exact: false },
-  { label: 'Quizzes', href: (id: string) => `/courses/${id}/quizzes`, icon: FlaskConical, exact: false },
+  {
+    label: 'Flashcards',
+    href: (id: string) => `/courses/${id}/flashcards`,
+    icon: Sparkles,
+    exact: false,
+  },
+  {
+    label: 'Quizzes',
+    href: (id: string) => `/courses/${id}/quizzes`,
+    icon: FlaskConical,
+    exact: false,
+  },
   { label: 'Library', href: (id: string) => `/courses/${id}/library`, icon: Library, exact: false },
   { label: 'Chat', href: (id: string) => `/courses/${id}/chat`, icon: MessageSquare, exact: false },
 ]

@@ -986,26 +986,86 @@ const BIO_FLASHCARDS = {
   deckTitle: 'BIO 1107 — Core Concepts & Terms',
   courseId: BIO_ID,
   cards: [
-    { front: 'What are the 4 major classes of organic molecules?', back: 'Carbohydrates, Lipids, Proteins, and Nucleic Acids. All contain carbon; most contain H, O, N, and/or S.' },
-    { front: 'What is the difference between a stereoisomer and a structural isomer?', back: 'Stereoisomers: mirror images of each other (L- vs D-form); same bonds but different spatial arrangement.\nStructural isomers: same formula but atoms bonded in different arrangements (e.g., glucose vs. fructose — both C₆H₁₂O₆).' },
-    { front: 'Which functional group is acidic (releases H⁺)?', back: 'Carboxyl group (—COOH). It donates a proton: —COOH → —COO⁻ + H⁺' },
-    { front: 'Which functional group is basic (accepts H⁺)?', back: 'Amino group (—NH₂). It accepts a proton: —NH₂ + H⁺ → —NH₃⁺' },
-    { front: 'What are the 9 major protein functions? (mnemonic: SETERMHDS)', back: 'Structural, Enzymatic, Transport (membrane), mobile (movement), Regulatory, Receptor, Hormonal, Defensive, Storage' },
-    { front: 'What makes proline unique among amino acids?', back: 'Proline has a ring structure that includes the central carbon AND the nitrogen. The N is part of a ring, bonded as an imino group (=NH) rather than a free amino group. This creates kinks/turns in protein chains.' },
-    { front: 'What are disulfide bonds and which amino acid forms them?', back: 'Disulfide bonds (—S—S—) form between two cysteine residues (each has a —SH sulfhydryl group). They help stabilize the tertiary/quaternary structure of proteins.' },
-    { front: 'What are the base-pairing rules in DNA?', back: 'A pairs with T (2 hydrogen bonds)\nG pairs with C (3 hydrogen bonds)\nRemember: stronger G≡C bonds (3 H-bonds) make G-C rich regions harder to denature.' },
-    { front: 'What does "semi-conservative" replication mean?', back: 'Each daughter DNA molecule consists of one original (parental) strand and one newly synthesized strand. Proven by the Meselson-Stahl experiment using nitrogen isotopes (¹⁵N/¹⁴N).' },
-    { front: 'What enzyme unwinds DNA during replication?', back: 'Helicase. It breaks H-bonds between base pairs and separates the two strands at the replication fork.' },
-    { front: 'What is a codon? How many are there?', back: 'A codon is a 3-nucleotide sequence on mRNA that specifies one amino acid. There are 64 codons: 61 code for amino acids and 3 are stop codons (UAA, UAG, UGA). AUG = start codon (methionine).' },
-    { front: 'What is the overall equation for cellular respiration?', back: 'C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + ~30-36 ATP\nGlucose + oxygen → carbon dioxide + water + ATP energy' },
-    { front: 'Where does glycolysis occur and what does it produce?', back: 'Location: Cytoplasm (cytosol)\nProducts per glucose: 2 pyruvate + 2 net ATP + 2 NADH\nDoes NOT require oxygen (can occur anaerobically).' },
-    { front: 'What is the final electron acceptor in aerobic cellular respiration?', back: 'Oxygen (O₂). It accepts electrons at the end of the electron transport chain and combines with H⁺ to form water (H₂O). Without O₂, the ETC stops and cells switch to fermentation.' },
-    { front: 'What is the difference between lactic acid and alcoholic fermentation?', back: 'Lactic acid: pyruvate → lactate. Occurs in muscle cells, red blood cells, some bacteria (yogurt).\nAlcoholic: pyruvate → ethanol + CO₂. Occurs in yeast and some plants.\nBoth regenerate NAD⁺ so glycolysis can continue; both yield only 2 ATP/glucose.' },
-    { front: 'What is gel electrophoresis used for in biotechnology?', back: 'Separates DNA, RNA, or proteins by size using an electric field through a gel matrix. Smaller fragments travel farther. Used in: DNA fingerprinting, PCR analysis, genetic testing, protein analysis.' },
-    { front: 'What are the 4 levels of protein structure?', back: '1. Primary: amino acid sequence (peptide bonds)\n2. Secondary: α-helices and β-sheets (H-bonds in backbone)\n3. Tertiary: overall 3D shape (R-group interactions, disulfide bonds, hydrophobic)\n4. Quaternary: multiple polypeptide chains (e.g., hemoglobin = 4 subunits)' },
-    { front: 'What is the role of hemoglobin and myoglobin?', back: 'Hemoglobin: carries O₂ in red blood cells; 4 subunits (quaternary structure); also carries some CO₂ as carbaminohemoglobin.\nMyoglobin: stores O₂ in muscle cells; single polypeptide (no quaternary structure); higher O₂ affinity than hemoglobin.' },
-    { front: 'What is the difference between competitive and noncompetitive inhibition?', back: 'Competitive: inhibitor mimics substrate and competes for the active site. Reversible with more substrate. Does NOT change Vmax; does increase apparent Km.\nNoncompetitive: inhibitor binds allosteric site, changes active site shape. Cannot be overcome with more substrate. Decreases Vmax; Km unchanged.' },
-    { front: 'Describe the steps of the scientific method as covered in BIO 1107.', back: '1. Observation\n2. Question (identify the problem)\n3. Hypothesis (testable if/then prediction)\n4. Experiment (controlled, with variables identified)\n5. Data Analysis\n6. Conclusion (support/reject hypothesis)\n7. Share/peer review\nRepeat — science is iterative!' },
+    {
+      front: 'What are the 4 major classes of organic molecules?',
+      back: 'Carbohydrates, Lipids, Proteins, and Nucleic Acids. All contain carbon; most contain H, O, N, and/or S.',
+    },
+    {
+      front: 'What is the difference between a stereoisomer and a structural isomer?',
+      back: 'Stereoisomers: mirror images of each other (L- vs D-form); same bonds but different spatial arrangement.\nStructural isomers: same formula but atoms bonded in different arrangements (e.g., glucose vs. fructose — both C₆H₁₂O₆).',
+    },
+    {
+      front: 'Which functional group is acidic (releases H⁺)?',
+      back: 'Carboxyl group (—COOH). It donates a proton: —COOH → —COO⁻ + H⁺',
+    },
+    {
+      front: 'Which functional group is basic (accepts H⁺)?',
+      back: 'Amino group (—NH₂). It accepts a proton: —NH₂ + H⁺ → —NH₃⁺',
+    },
+    {
+      front: 'What are the 9 major protein functions? (mnemonic: SETERMHDS)',
+      back: 'Structural, Enzymatic, Transport (membrane), mobile (movement), Regulatory, Receptor, Hormonal, Defensive, Storage',
+    },
+    {
+      front: 'What makes proline unique among amino acids?',
+      back: 'Proline has a ring structure that includes the central carbon AND the nitrogen. The N is part of a ring, bonded as an imino group (=NH) rather than a free amino group. This creates kinks/turns in protein chains.',
+    },
+    {
+      front: 'What are disulfide bonds and which amino acid forms them?',
+      back: 'Disulfide bonds (—S—S—) form between two cysteine residues (each has a —SH sulfhydryl group). They help stabilize the tertiary/quaternary structure of proteins.',
+    },
+    {
+      front: 'What are the base-pairing rules in DNA?',
+      back: 'A pairs with T (2 hydrogen bonds)\nG pairs with C (3 hydrogen bonds)\nRemember: stronger G≡C bonds (3 H-bonds) make G-C rich regions harder to denature.',
+    },
+    {
+      front: 'What does "semi-conservative" replication mean?',
+      back: 'Each daughter DNA molecule consists of one original (parental) strand and one newly synthesized strand. Proven by the Meselson-Stahl experiment using nitrogen isotopes (¹⁵N/¹⁴N).',
+    },
+    {
+      front: 'What enzyme unwinds DNA during replication?',
+      back: 'Helicase. It breaks H-bonds between base pairs and separates the two strands at the replication fork.',
+    },
+    {
+      front: 'What is a codon? How many are there?',
+      back: 'A codon is a 3-nucleotide sequence on mRNA that specifies one amino acid. There are 64 codons: 61 code for amino acids and 3 are stop codons (UAA, UAG, UGA). AUG = start codon (methionine).',
+    },
+    {
+      front: 'What is the overall equation for cellular respiration?',
+      back: 'C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + ~30-36 ATP\nGlucose + oxygen → carbon dioxide + water + ATP energy',
+    },
+    {
+      front: 'Where does glycolysis occur and what does it produce?',
+      back: 'Location: Cytoplasm (cytosol)\nProducts per glucose: 2 pyruvate + 2 net ATP + 2 NADH\nDoes NOT require oxygen (can occur anaerobically).',
+    },
+    {
+      front: 'What is the final electron acceptor in aerobic cellular respiration?',
+      back: 'Oxygen (O₂). It accepts electrons at the end of the electron transport chain and combines with H⁺ to form water (H₂O). Without O₂, the ETC stops and cells switch to fermentation.',
+    },
+    {
+      front: 'What is the difference between lactic acid and alcoholic fermentation?',
+      back: 'Lactic acid: pyruvate → lactate. Occurs in muscle cells, red blood cells, some bacteria (yogurt).\nAlcoholic: pyruvate → ethanol + CO₂. Occurs in yeast and some plants.\nBoth regenerate NAD⁺ so glycolysis can continue; both yield only 2 ATP/glucose.',
+    },
+    {
+      front: 'What is gel electrophoresis used for in biotechnology?',
+      back: 'Separates DNA, RNA, or proteins by size using an electric field through a gel matrix. Smaller fragments travel farther. Used in: DNA fingerprinting, PCR analysis, genetic testing, protein analysis.',
+    },
+    {
+      front: 'What are the 4 levels of protein structure?',
+      back: '1. Primary: amino acid sequence (peptide bonds)\n2. Secondary: α-helices and β-sheets (H-bonds in backbone)\n3. Tertiary: overall 3D shape (R-group interactions, disulfide bonds, hydrophobic)\n4. Quaternary: multiple polypeptide chains (e.g., hemoglobin = 4 subunits)',
+    },
+    {
+      front: 'What is the role of hemoglobin and myoglobin?',
+      back: 'Hemoglobin: carries O₂ in red blood cells; 4 subunits (quaternary structure); also carries some CO₂ as carbaminohemoglobin.\nMyoglobin: stores O₂ in muscle cells; single polypeptide (no quaternary structure); higher O₂ affinity than hemoglobin.',
+    },
+    {
+      front: 'What is the difference between competitive and noncompetitive inhibition?',
+      back: 'Competitive: inhibitor mimics substrate and competes for the active site. Reversible with more substrate. Does NOT change Vmax; does increase apparent Km.\nNoncompetitive: inhibitor binds allosteric site, changes active site shape. Cannot be overcome with more substrate. Decreases Vmax; Km unchanged.',
+    },
+    {
+      front: 'Describe the steps of the scientific method as covered in BIO 1107.',
+      back: '1. Observation\n2. Question (identify the problem)\n3. Hypothesis (testable if/then prediction)\n4. Experiment (controlled, with variables identified)\n5. Data Analysis\n6. Conclusion (support/reject hypothesis)\n7. Share/peer review\nRepeat — science is iterative!',
+    },
   ],
 }
 
@@ -1014,22 +1074,71 @@ const CHEM_FLASHCARDS = {
   deckTitle: 'CHEM 1128Q — Core Equations & Concepts',
   courseId: CHEM_ID,
   cards: [
-    { front: 'Write the equilibrium constant expression for: aA + bB ⇌ cC + dD', back: 'Kc = [C]ᶜ[D]^d / [A]^a[B]^b\n\nRemember: products in numerator, reactants in denominator. Pure solids and pure liquids are NOT included. Coefficients become exponents.' },
-    { front: 'If K > 1, where does equilibrium lie? If K < 1?', back: 'K > 1: equilibrium lies to the RIGHT (products favored)\nK < 1: equilibrium lies to the LEFT (reactants favored)\nK = 1: roughly equal amounts of reactants and products' },
-    { front: 'What is the reaction quotient Q and how is it used?', back: 'Q uses current (non-equilibrium) concentrations, same formula as K.\n• Q < K → forward reaction (→) to reach equilibrium\n• Q > K → reverse reaction (←) to reach equilibrium\n• Q = K → system is at equilibrium' },
-    { front: "State Le Chatelier's Principle", back: "If a stress is applied to a system at equilibrium, the system shifts to partially counteract that stress.\nStresses: adding/removing reactants or products, changing pressure (gases), changing temperature.\nOnly temperature changes the value of K." },
-    { front: "How does temperature affect K for an exothermic reaction?", back: 'For an exothermic reaction (ΔH < 0), heat is a product:\n• Increase T → equilibrium shifts LEFT → K decreases\n• Decrease T → equilibrium shifts RIGHT → K increases\nFor endothermic (ΔH > 0): opposite — increase T shifts right, K increases.' },
-    { front: 'Write the Henderson-Hasselbalch equation and state when a buffer is most effective.', back: 'pH = pKa + log([A⁻]/[HA])\n\nMost effective (maximum buffering capacity) when [A⁻] = [HA], so pH = pKa.\nUseful range: approximately pKa ± 1 pH unit.' },
-    { front: 'What happens at the equivalence point of a strong acid/strong base titration? Weak acid/strong base?', back: 'Strong acid + strong base: equivalence point pH = 7.00 (neutral; only water and salt remain)\nWeak acid + strong base: equivalence point pH > 7 (conjugate base is a weak base; hydrolyzes to give OH⁻)\nWeak base + strong acid: equivalence point pH < 7 (conjugate acid is a weak acid)' },
-    { front: 'Write the Ksp expression for lead iodide, PbI₂', back: 'PbI₂(s) ⇌ Pb²⁺(aq) + 2I⁻(aq)\nKsp = [Pb²⁺][I⁻]²\n\nIf molar solubility = s:\nKsp = (s)(2s)² = 4s³\nSolve: s = (Ksp/4)^(1/3)' },
-    { front: 'When does precipitation occur in terms of Q vs. Ksp?', back: 'Precipitation occurs when Q > Ksp (the ion product exceeds the solubility product).\n• Q < Ksp: unsaturated, more solid can dissolve\n• Q = Ksp: saturated (at equilibrium)\n• Q > Ksp: supersaturated → precipitation occurs until Q = Ksp' },
-    { front: 'What is the rate law for a first-order reaction and what is its half-life?', back: 'Rate = k[A]\nIntegrated: ln[A] = ln[A]₀ − kt  (or [A] = [A]₀e^{−kt})\nHalf-life: t½ = 0.693/k\nKey: first-order half-life is CONSTANT (independent of concentration) — used for radioactive decay!' },
-    { front: 'Write the Arrhenius equation and explain how to find Ea from two temperatures.', back: 'k = Ae^{−Ea/RT}\n\nTo find Ea from two rate constants:\nln(k₂/k₁) = (Ea/R)(1/T₁ − 1/T₂)\n\nA = frequency factor\nEa = activation energy (J/mol)\nR = 8.314 J/(mol·K)\nT = temperature in Kelvin' },
-    { front: 'What is the common ion effect and how does it affect solubility?', back: 'Adding an ion that is already part of the equilibrium shifts it left (Le Chatelier), DECREASING solubility.\nExample: PbI₂ is LESS soluble in 0.10 M KI than in pure water because the extra I⁻ from KI suppresses dissolution.\nThe common ion effect is why tooth enamel is more stable in fluoride-containing water.' },
-    { front: 'What is Kp and how is it related to Kc?', back: 'Kp = equilibrium constant expressed in terms of partial pressures (for gases)\nKp = Kc(RT)^Δn\nwhere Δn = (moles gaseous products) − (moles gaseous reactants)\nIf Δn = 0, then Kp = Kc' },
-    { front: 'How do you calculate pH of a weak acid solution? (Steps)', back: '1. Write dissociation equation: HA ⇌ H⁺ + A⁻\n2. Set up ICE table with x = amount dissociated\n3. Ka = x²/(C − x)\n4. Simplify: if Ka << C, then C − x ≈ C\n5. Solve: x = [H⁺] = √(Ka · C)\n6. pH = −log[H⁺]\n7. Check: is x/C < 5%? If not, use quadratic.' },
-    { front: 'What makes something a buffer vs. just a weak acid solution?', back: 'A buffer contains BOTH a weak acid AND its conjugate base (in comparable amounts).\nA weak acid solution alone is NOT a buffer — it cannot resist addition of acid (no conjugate base present) effectively.\nRequirements:\n• pKa within ~1 pH unit of desired pH\n• Significant concentrations of both HA and A⁻' },
-    { front: 'Describe the four colligative properties and what they depend on.', back: 'Colligative properties depend on the NUMBER of solute particles, NOT their identity:\n1. Vapor pressure lowering: ΔP = Xsolute × P°solvent\n2. Boiling point elevation: ΔTb = Kb × m × i\n3. Freezing point depression: ΔTf = Kf × m × i\n4. Osmotic pressure: π = MRT × i\nwhere i = van\'t Hoff factor (# particles per formula unit), m = molality' },
+    {
+      front: 'Write the equilibrium constant expression for: aA + bB ⇌ cC + dD',
+      back: 'Kc = [C]ᶜ[D]^d / [A]^a[B]^b\n\nRemember: products in numerator, reactants in denominator. Pure solids and pure liquids are NOT included. Coefficients become exponents.',
+    },
+    {
+      front: 'If K > 1, where does equilibrium lie? If K < 1?',
+      back: 'K > 1: equilibrium lies to the RIGHT (products favored)\nK < 1: equilibrium lies to the LEFT (reactants favored)\nK = 1: roughly equal amounts of reactants and products',
+    },
+    {
+      front: 'What is the reaction quotient Q and how is it used?',
+      back: 'Q uses current (non-equilibrium) concentrations, same formula as K.\n• Q < K → forward reaction (→) to reach equilibrium\n• Q > K → reverse reaction (←) to reach equilibrium\n• Q = K → system is at equilibrium',
+    },
+    {
+      front: "State Le Chatelier's Principle",
+      back: 'If a stress is applied to a system at equilibrium, the system shifts to partially counteract that stress.\nStresses: adding/removing reactants or products, changing pressure (gases), changing temperature.\nOnly temperature changes the value of K.',
+    },
+    {
+      front: 'How does temperature affect K for an exothermic reaction?',
+      back: 'For an exothermic reaction (ΔH < 0), heat is a product:\n• Increase T → equilibrium shifts LEFT → K decreases\n• Decrease T → equilibrium shifts RIGHT → K increases\nFor endothermic (ΔH > 0): opposite — increase T shifts right, K increases.',
+    },
+    {
+      front: 'Write the Henderson-Hasselbalch equation and state when a buffer is most effective.',
+      back: 'pH = pKa + log([A⁻]/[HA])\n\nMost effective (maximum buffering capacity) when [A⁻] = [HA], so pH = pKa.\nUseful range: approximately pKa ± 1 pH unit.',
+    },
+    {
+      front:
+        'What happens at the equivalence point of a strong acid/strong base titration? Weak acid/strong base?',
+      back: 'Strong acid + strong base: equivalence point pH = 7.00 (neutral; only water and salt remain)\nWeak acid + strong base: equivalence point pH > 7 (conjugate base is a weak base; hydrolyzes to give OH⁻)\nWeak base + strong acid: equivalence point pH < 7 (conjugate acid is a weak acid)',
+    },
+    {
+      front: 'Write the Ksp expression for lead iodide, PbI₂',
+      back: 'PbI₂(s) ⇌ Pb²⁺(aq) + 2I⁻(aq)\nKsp = [Pb²⁺][I⁻]²\n\nIf molar solubility = s:\nKsp = (s)(2s)² = 4s³\nSolve: s = (Ksp/4)^(1/3)',
+    },
+    {
+      front: 'When does precipitation occur in terms of Q vs. Ksp?',
+      back: 'Precipitation occurs when Q > Ksp (the ion product exceeds the solubility product).\n• Q < Ksp: unsaturated, more solid can dissolve\n• Q = Ksp: saturated (at equilibrium)\n• Q > Ksp: supersaturated → precipitation occurs until Q = Ksp',
+    },
+    {
+      front: 'What is the rate law for a first-order reaction and what is its half-life?',
+      back: 'Rate = k[A]\nIntegrated: ln[A] = ln[A]₀ − kt  (or [A] = [A]₀e^{−kt})\nHalf-life: t½ = 0.693/k\nKey: first-order half-life is CONSTANT (independent of concentration) — used for radioactive decay!',
+    },
+    {
+      front: 'Write the Arrhenius equation and explain how to find Ea from two temperatures.',
+      back: 'k = Ae^{−Ea/RT}\n\nTo find Ea from two rate constants:\nln(k₂/k₁) = (Ea/R)(1/T₁ − 1/T₂)\n\nA = frequency factor\nEa = activation energy (J/mol)\nR = 8.314 J/(mol·K)\nT = temperature in Kelvin',
+    },
+    {
+      front: 'What is the common ion effect and how does it affect solubility?',
+      back: 'Adding an ion that is already part of the equilibrium shifts it left (Le Chatelier), DECREASING solubility.\nExample: PbI₂ is LESS soluble in 0.10 M KI than in pure water because the extra I⁻ from KI suppresses dissolution.\nThe common ion effect is why tooth enamel is more stable in fluoride-containing water.',
+    },
+    {
+      front: 'What is Kp and how is it related to Kc?',
+      back: 'Kp = equilibrium constant expressed in terms of partial pressures (for gases)\nKp = Kc(RT)^Δn\nwhere Δn = (moles gaseous products) − (moles gaseous reactants)\nIf Δn = 0, then Kp = Kc',
+    },
+    {
+      front: 'How do you calculate pH of a weak acid solution? (Steps)',
+      back: '1. Write dissociation equation: HA ⇌ H⁺ + A⁻\n2. Set up ICE table with x = amount dissociated\n3. Ka = x²/(C − x)\n4. Simplify: if Ka << C, then C − x ≈ C\n5. Solve: x = [H⁺] = √(Ka · C)\n6. pH = −log[H⁺]\n7. Check: is x/C < 5%? If not, use quadratic.',
+    },
+    {
+      front: 'What makes something a buffer vs. just a weak acid solution?',
+      back: 'A buffer contains BOTH a weak acid AND its conjugate base (in comparable amounts).\nA weak acid solution alone is NOT a buffer — it cannot resist addition of acid (no conjugate base present) effectively.\nRequirements:\n• pKa within ~1 pH unit of desired pH\n• Significant concentrations of both HA and A⁻',
+    },
+    {
+      front: 'Describe the four colligative properties and what they depend on.',
+      back: "Colligative properties depend on the NUMBER of solute particles, NOT their identity:\n1. Vapor pressure lowering: ΔP = Xsolute × P°solvent\n2. Boiling point elevation: ΔTb = Kb × m × i\n3. Freezing point depression: ΔTf = Kf × m × i\n4. Osmotic pressure: π = MRT × i\nwhere i = van't Hoff factor (# particles per formula unit), m = molality",
+    },
   ],
 }
 
@@ -1057,7 +1166,13 @@ async function main() {
     await db.note.upsert({
       where: { id: n.id },
       update: { title: n.title, contentMd: n.contentMd },
-      create: { id: n.id, courseId: BIO_ID, topicId: n.topicId, title: n.title, contentMd: n.contentMd },
+      create: {
+        id: n.id,
+        courseId: BIO_ID,
+        topicId: n.topicId,
+        title: n.title,
+        contentMd: n.contentMd,
+      },
     })
   }
 
@@ -1075,7 +1190,13 @@ async function main() {
     await db.note.upsert({
       where: { id: n.id },
       update: { title: n.title, contentMd: n.contentMd },
-      create: { id: n.id, courseId: CHEM_ID, topicId: n.topicId, title: n.title, contentMd: n.contentMd },
+      create: {
+        id: n.id,
+        courseId: CHEM_ID,
+        topicId: n.topicId,
+        title: n.title,
+        contentMd: n.contentMd,
+      },
     })
   }
 
@@ -1137,5 +1258,8 @@ Done! Inserted:
 }
 
 main()
-  .catch((e) => { console.error(e); process.exit(1) })
+  .catch((e) => {
+    console.error(e)
+    process.exit(1)
+  })
   .finally(() => db.$disconnect().then(() => pool.end()))

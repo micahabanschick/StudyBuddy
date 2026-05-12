@@ -37,9 +37,7 @@ export default async function ReviewPage() {
   }
 
   const courses = await getCourses()
-  const allDecks = (
-    await Promise.all(courses.map((c) => getDecks(c.id)))
-  ).flat()
+  const allDecks = (await Promise.all(courses.map((c) => getDecks(c.id)))).flat()
 
   const totalDue = allDecks.reduce((sum, d) => sum + d.dueCount, 0)
   const dueDecks = allDecks.filter((d) => d.dueCount > 0)
@@ -49,12 +47,10 @@ export default async function ReviewPage() {
       <header className="mb-8 flex items-end justify-between">
         <div>
           <h2 className="text-2xl font-semibold tracking-tight">Daily review</h2>
-          <p className="text-muted-foreground text-sm">
-            FSRS-scheduled queue across all courses
-          </p>
+          <p className="text-muted-foreground text-sm">FSRS-scheduled queue across all courses</p>
         </div>
         {totalDue > 0 && (
-          <Badge className="text-sm px-3 py-1">
+          <Badge className="px-3 py-1 text-sm">
             {totalDue} card{totalDue === 1 ? '' : 's'} due
           </Badge>
         )}
@@ -62,7 +58,7 @@ export default async function ReviewPage() {
 
       {dueDecks.length > 0 ? (
         <div className="flex flex-col gap-3">
-          <h3 className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
+          <h3 className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
             Due now
           </h3>
           {dueDecks.map((deck) => {
@@ -105,8 +101,8 @@ export default async function ReviewPage() {
               <Sparkles className="size-4" /> All caught up!
             </CardTitle>
             <CardDescription>
-              No cards are due right now. Create flashcards from the AI panel inside any note,
-              then come back here when they&apos;re due.
+              No cards are due right now. Create flashcards from the AI panel inside any note, then
+              come back here when they&apos;re due.
             </CardDescription>
           </CardHeader>
         </Card>
@@ -114,7 +110,7 @@ export default async function ReviewPage() {
 
       {allDecks.length > 0 && (
         <div className="mt-8 flex flex-col gap-3">
-          <h3 className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
+          <h3 className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
             All decks
           </h3>
           {allDecks.map((deck) => {

@@ -38,9 +38,7 @@ export function CourseForm({ open, onOpenChange, course }: Props) {
   const isEdit = !!course
   const [color, setColor] = React.useState(course?.color ?? PALETTE[4])
 
-  const action = isEdit
-    ? updateCourse.bind(null, course.id)
-    : createCourse
+  const action = isEdit ? updateCourse.bind(null, course.id) : createCourse
 
   const [state, dispatch, pending] = useActionState(action, null)
 

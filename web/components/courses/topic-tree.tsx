@@ -36,7 +36,10 @@ export function TopicTree({ courseId, topics, activeTopic, onTopicSelect }: Prop
   }
 
   const handleRename = async (id: string) => {
-    if (!editTitle.trim()) { setEditingId(null); return }
+    if (!editTitle.trim()) {
+      setEditingId(null)
+      return
+    }
     setPending(true)
     await updateTopic(id, editTitle.trim(), courseId)
     setEditingId(null)
@@ -55,7 +58,7 @@ export function TopicTree({ courseId, topics, activeTopic, onTopicSelect }: Prop
   return (
     <div className="flex flex-col gap-0.5">
       <div className="flex items-center justify-between px-2 pb-1">
-        <span className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
+        <span className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
           Topics
         </span>
         <Button
@@ -116,7 +119,10 @@ export function TopicTree({ courseId, topics, activeTopic, onTopicSelect }: Prop
           <div key={t.id} className="group flex items-center">
             <button
               onClick={() => onTopicSelect(t.id)}
-              onDoubleClick={() => { setEditingId(t.id); setEditTitle(t.title) }}
+              onDoubleClick={() => {
+                setEditingId(t.id)
+                setEditTitle(t.title)
+              }}
               className={cn(
                 'flex flex-1 items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors',
                 activeTopic === t.id
@@ -134,7 +140,7 @@ export function TopicTree({ courseId, topics, activeTopic, onTopicSelect }: Prop
               disabled={pending}
               aria-label="Delete topic"
             >
-              <Trash2 className="size-3 text-destructive" />
+              <Trash2 className="text-destructive size-3" />
             </Button>
           </div>
         ),
@@ -149,7 +155,10 @@ export function TopicTree({ courseId, topics, activeTopic, onTopicSelect }: Prop
             onChange={(e) => setNewTitle(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === 'Enter') handleCreate()
-              if (e.key === 'Escape') { setAdding(false); setNewTitle('') }
+              if (e.key === 'Escape') {
+                setAdding(false)
+                setNewTitle('')
+              }
             }}
             className="h-7 text-sm"
           />
@@ -166,7 +175,10 @@ export function TopicTree({ courseId, topics, activeTopic, onTopicSelect }: Prop
             variant="ghost"
             size="icon"
             className="h-6 w-6 shrink-0"
-            onClick={() => { setAdding(false); setNewTitle('') }}
+            onClick={() => {
+              setAdding(false)
+              setNewTitle('')
+            }}
           >
             <X className="size-3" />
           </Button>

@@ -67,11 +67,25 @@ export async function getNoteLinks(
     const [incoming, outgoing] = await Promise.all([
       db.note.findMany({
         where: { outgoingLinks: { some: { toNoteId: noteId } } },
-        select: { id: true, title: true, topicId: true, courseId: true, createdAt: true, updatedAt: true },
+        select: {
+          id: true,
+          title: true,
+          topicId: true,
+          courseId: true,
+          createdAt: true,
+          updatedAt: true,
+        },
       }),
       db.note.findMany({
         where: { incomingLinks: { some: { fromNoteId: noteId } } },
-        select: { id: true, title: true, topicId: true, courseId: true, createdAt: true, updatedAt: true },
+        select: {
+          id: true,
+          title: true,
+          topicId: true,
+          courseId: true,
+          createdAt: true,
+          updatedAt: true,
+        },
       }),
     ])
     return { incoming, outgoing }

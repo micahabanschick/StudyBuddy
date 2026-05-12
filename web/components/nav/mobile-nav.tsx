@@ -32,7 +32,7 @@ export function MobileNav({ courses }: { courses: CourseRow[] }) {
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent side="left" className="w-72 p-0">
           <SheetHeader className="flex h-14 flex-row items-center gap-2 border-b px-5">
-            <div className="bg-primary text-primary-foreground grid size-7 place-items-center rounded-md shadow-sm shadow-primary/40">
+            <div className="bg-primary text-primary-foreground shadow-primary/40 grid size-7 place-items-center rounded-md shadow-sm">
               <Sparkles className="size-4" />
             </div>
             <SheetTitle className="text-base font-semibold tracking-tight">StudyBuddy</SheetTitle>
@@ -65,7 +65,7 @@ export function MobileNav({ courses }: { courses: CourseRow[] }) {
               <>
                 <Separator className="mx-3" />
                 <div className="px-3 py-3">
-                  <p className="text-muted-foreground mb-2 px-3 text-xs font-medium uppercase tracking-wider">
+                  <p className="text-muted-foreground mb-2 px-3 text-xs font-medium tracking-wider uppercase">
                     Courses
                   </p>
                   {courses.map((c) => {
@@ -88,7 +88,7 @@ export function MobileNav({ courses }: { courses: CourseRow[] }) {
                           style={{ backgroundColor: c.color ?? 'var(--primary)' }}
                         />
                         <span className="truncate">
-                          <span className="font-mono text-xs mr-1.5">{c.code}</span>
+                          <span className="mr-1.5 font-mono text-xs">{c.code}</span>
                           {c.title}
                         </span>
                       </Link>
@@ -98,7 +98,7 @@ export function MobileNav({ courses }: { courses: CourseRow[] }) {
               </>
             )}
 
-            <div className="border-t px-5 py-3 flex justify-end">
+            <div className="flex justify-end border-t px-5 py-3">
               <ThemeToggle />
             </div>
           </ScrollArea>

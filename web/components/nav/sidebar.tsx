@@ -21,7 +21,7 @@ export function Sidebar({ courses = [] }: { courses?: Course[] }) {
   return (
     <aside className="bg-sidebar text-sidebar-foreground hidden h-svh w-64 shrink-0 flex-col border-r md:flex">
       <div className="flex h-14 items-center gap-2 px-5">
-        <div className="bg-primary text-primary-foreground grid size-7 place-items-center rounded-md shadow-sm shadow-primary/40">
+        <div className="bg-primary text-primary-foreground shadow-primary/40 grid size-7 place-items-center rounded-md shadow-sm">
           <Sparkles className="size-4" />
         </div>
         <span className="text-base font-semibold tracking-tight">StudyBuddy</span>
@@ -47,7 +47,7 @@ export function Sidebar({ courses = [] }: { courses?: Course[] }) {
                 {active && (
                   <motion.span
                     layoutId="sidebar-active"
-                    className="bg-sidebar-primary absolute inset-0 -z-10 rounded-md shadow-sm shadow-primary/30"
+                    className="bg-sidebar-primary shadow-primary/30 absolute inset-0 -z-10 rounded-md shadow-sm"
                     transition={{ type: 'spring', stiffness: 380, damping: 32 }}
                   />
                 )}
@@ -59,7 +59,7 @@ export function Sidebar({ courses = [] }: { courses?: Course[] }) {
         </nav>
 
         <div className="mt-6">
-          <div className="text-muted-foreground flex items-center justify-between px-3 pb-2 text-xs font-medium uppercase tracking-wider">
+          <div className="text-muted-foreground flex items-center justify-between px-3 pb-2 text-xs font-medium tracking-wider uppercase">
             <span>Courses</span>
             <span className="tabular-nums">{courses.length}</span>
           </div>

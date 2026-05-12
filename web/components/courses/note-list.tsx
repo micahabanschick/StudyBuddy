@@ -74,7 +74,11 @@ export function NoteList({ courseId, notes, activeTopic, loading }: Props) {
             <p>{searchQuery ? 'No matching notes' : 'No notes yet'}</p>
             {!searchQuery && (
               <Button variant="outline" size="sm" onClick={handleCreate} disabled={creating}>
-                {creating ? <Loader2 className="size-4 animate-spin" /> : <Plus className="size-4" />}
+                {creating ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : (
+                  <Plus className="size-4" />
+                )}
                 New note
               </Button>
             )}
@@ -85,7 +89,13 @@ export function NoteList({ courseId, notes, activeTopic, loading }: Props) {
               const href = `/courses/${courseId}/notes/${note.id}`
               const active = pathname === href
               return (
-                <NoteListRow key={note.id} note={note} href={href} active={active} courseId={courseId} />
+                <NoteListRow
+                  key={note.id}
+                  note={note}
+                  href={href}
+                  active={active}
+                  courseId={courseId}
+                />
               )
             })}
           </div>
@@ -124,9 +134,7 @@ function NoteListRow({
         href={href}
         className={cn(
           'block rounded-md px-2 py-2 transition-colors',
-          active
-            ? 'bg-accent text-accent-foreground'
-            : 'hover:bg-accent/60',
+          active ? 'bg-accent text-accent-foreground' : 'hover:bg-accent/60',
         )}
       >
         <p className="truncate text-sm font-medium">{note.title}</p>
@@ -143,7 +151,7 @@ function NoteListRow({
         {deleting ? (
           <Loader2 className="size-3 animate-spin" />
         ) : (
-          <Trash2 className="size-3 text-destructive" />
+          <Trash2 className="text-destructive size-3" />
         )}
       </Button>
     </div>

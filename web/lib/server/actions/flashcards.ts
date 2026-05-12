@@ -28,11 +28,7 @@ export async function saveFlashcards(
 
 export type RatingValue = 1 | 2 | 3 | 4
 
-export async function rateCard(
-  cardId: string,
-  rating: RatingValue,
-  userId: string,
-): Promise<void> {
+export async function rateCard(cardId: string, rating: RatingValue, userId: string): Promise<void> {
   if (!isDatabaseConfigured()) return
 
   const f = fsrs(generatorParameters())
