@@ -47,7 +47,7 @@ export function NoteEditor({ noteId, courseId, topicId, initialTitle, initialCon
   const editor = useEditor({
     extensions: [
       StarterKit.configure({ codeBlock: { HTMLAttributes: { class: 'not-prose' } } }),
-      Image.configure({ inline: false, allowBase64: false }),
+      Image.configure({ inline: true, allowBase64: false }),
       Table.configure({ resizable: false }),
       TableRow,
       TableHeader,
