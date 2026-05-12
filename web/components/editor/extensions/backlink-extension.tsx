@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Node, mergeAttributes } from '@tiptap/core'
 import { ReactNodeViewRenderer, NodeViewWrapper } from '@tiptap/react'
 import { Suggestion, type SuggestionOptions } from '@tiptap/suggestion'
@@ -48,7 +47,7 @@ export const BacklinkExtension = Node.create({
       Suggestion({
         editor: this.editor,
         char: '[[',
-        command: ({ editor, range, props }) => {
+        command: ({ editor, range, props }: any) => {
           editor
             .chain()
             .focus()
@@ -60,7 +59,7 @@ export const BacklinkExtension = Node.create({
             .insertContent(' ')
             .run()
         },
-        items: async ({ query, editor }) => {
+        items: async ({ query, editor }: any) => {
           if (!query || query.length < 1) return []
           // Get courseId from editor storage (set by NoteEditor)
           const courseId = editor.storage.backlink?.courseId
@@ -79,17 +78,17 @@ export const BacklinkExtension = Node.create({
           let popup: HTMLElement | null = null
 
           return {
-            onStart: (props) => {
+            onStart: (props: any) => {
               popup = document.createElement('div')
               popup.className =
                 'fixed z-50 min-w-[12rem] overflow-hidden rounded-md border bg-popover p-1 shadow-md'
               document.body.appendChild(popup)
               renderSuggestions(popup, props)
             },
-            onUpdate: (props) => {
+            onUpdate: (props: any) => {
               if (popup) renderSuggestions(popup, props)
             },
-            onKeyDown: ({ event }) => {
+            onKeyDown: ({ event }: any) => {
               if (event.key === 'Escape') {
                 popup?.remove()
                 popup = null

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Node, mergeAttributes } from '@tiptap/core'
 import { ReactNodeViewRenderer, NodeViewWrapper } from '@tiptap/react'
 import React from 'react'

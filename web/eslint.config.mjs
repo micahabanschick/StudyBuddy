@@ -16,6 +16,20 @@ const eslintConfig = defineConfig([
     'node_modules/**',
     'prisma/migrations/**',
   ]),
+  // Editor extensions and the note editor use unavoidable `any` types when
+  // interfacing with Tiptap's internal ProseMirror APIs and tiptap-markdown.
+  {
+    files: ['components/editor/**/*.tsx', 'components/editor/**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
+  {
+    files: ['components/editor/note-editor.tsx'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
 ])
 
 export default eslintConfig

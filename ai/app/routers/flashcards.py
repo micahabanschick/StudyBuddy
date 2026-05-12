@@ -97,6 +97,8 @@ def generate(
         )
 
     raw = tool_block.input  # type: ignore[attr-defined]
-    cards = [FlashcardItem(front=c["front"], back=c["back"]) for c in raw.get("cards", [])]
+    cards = [
+        FlashcardItem(front=c["front"], back=c["back"]) for c in raw.get("cards", [])
+    ]
 
     return FlashcardsGenerateResponse(cards=cards, note_title=body.note_title)
